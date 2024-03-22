@@ -1,41 +1,41 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+    <nav class="navbar navbar-expand-lg bg-color-background">
+      <div class=" container-fluid">
+        <a class="navbar-brand text-color-logotext" href="#">prog_courses</a>
+        <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
+          <div class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+            </li>
           </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <!-- <form class="d-flex" role="search">
+          <!-- <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form> -->
-    </div>
-  </div>
-</nav>
+        </div>
+      </div>
+    </nav>
   </div>
 </template>
 
@@ -50,6 +50,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+:root {
+  --text: #EDF4F8;
+  --background: #0E243A;
+  --primary: #2985C2;
+  --secondary: #125581;
+  --accent: #0b3ca6;
+}
+
 h3 {
   margin: 40px 0 0;
 }
@@ -65,5 +74,26 @@ li {
 }
 
 a {
-  color: #42b983;
-}</style>
+  /* color: #42b983; */
+  color: var(--text);
+
+}
+
+.text-button {
+  color: var(--text);
+}
+
+.text-color-text {
+  color: var(--text);
+}
+
+.text-color-logotext {
+  color: var(--logotext);
+}
+
+.bg-color-background{
+  background-color: var(--background);
+}
+
+</style>
+
