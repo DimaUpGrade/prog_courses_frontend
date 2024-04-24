@@ -1,22 +1,30 @@
 <template>
-    <div class="wrapper">
-        <NavBar></NavBar>
-        <div class="content" v-if="course_info !== null">
+    <NavBar></NavBar>
+    <div class="wrapper" v-if="course_info !== null">
+
+        <div id="course-info-block">
             <h1>{{ course_info.title }}</h1>
             <h3>by {{ course_info.author.username }}</h3>
             <Tags v-bind:tags="course_info.tags" />
             <h4>Платформа: {{ course_info.platform.title }}</h4>
-            <h5>Описание:</h5>
+            <h4>Описание:</h4>
             <p>{{ course_info.description }}</p>
 
-            <div id="course-link">
+            <div id="course-link" @click="openInNewTab(course_info.link)">
                 <p>Ссылка на курс</p>
             </div>
 
             <h4>Опубликовал: <u>{{ course_info.publisher.username }}</u></h4>
             <p>{{ course_info }}</p>
         </div>
+        <div id="reviews-block" v-if="course_reviews !== null">
+            <h1>Отзывы</h1>
+            <Reviews v-bind:reviews="course_reviews"/>
+        </div>
     </div>
+    <!-- <div>
+        <h1>comments</h1>
+    </div> -->
 </template>
 
 <script>
@@ -24,20 +32,30 @@ import NavBar from '@/components/NavBar.vue';
 import { API_URL, axios, get_course_data } from '../network';
 import router from '@/router';
 import Tags from '@/components/Tags.vue';
+import Reviews from '@/components/Reviews.vue';
 
 export default {
     name: 'CourseView',
     components: {
         NavBar,
-        Tags
+        Tags,
+        Reviews
+    },
+    methods: {
+        openInNewTab(url) {
+            window.open(url, '_blank', 'noreferrer')
+        }
     },
     data() {
         return {
-            course_info: null
-        }
+            course_info: null,
+            course_reviews: {}
+        };
     },
     created() {
         const id = this.$route.params.id
+
+        // get course info
         axios
             .get(API_URL + '/api/courses/' + id + '/')
             .then(response => (this.course_info = response.data))
@@ -48,9 +66,16 @@ export default {
                         router.replace({ path: '/page_not_found' });
                         break;
                     default:
-                        router.push({path: '/'})
+                        router.push({ path: '/' })
                 }
             })
+
+        // get course's reviews
+        axios
+            .get(API_URL + '/api/courses/' + id + '/reviews/')
+            .then(response => (this.course_reviews = response.data.results))
+
+        // alert(this.course_reviews)
         // alert(id)
         // this.course_info = get_course_data(id)
         // alert(this.course_info)
@@ -59,7 +84,7 @@ export default {
 </script>
 
 <style>
-.content {
+.wrapper {
     margin: 20px;
     padding: 20px;
     max-width: 100% - 40px;
@@ -71,6 +96,9 @@ export default {
         0 4px 4px hsl(0deg 0% 0% / 0.075),
         0 8px 8px hsl(0deg 0% 0% / 0.075),
         0 16px 16px hsl(0deg 0% 0% / 0.075);
+    display: flex;
+    border-radius: 5px;
+    gap: 1%;
 }
 
 #course-link {
@@ -85,4 +113,28 @@ div#course-link p {
     padding: 5px;
 }
 
+#course-link:hover {
+    cursor: pointer;
+}
+
+#course-info-block {
+    width: 69%;
+}
+
+#reviews-block {
+    width: 30%;
+    min-height: 500px;
+    color: white;
+    /* background-color: var(--additional-block-bg); */
+    background-color: var(--bright-background);
+    box-shadow:
+        0 1px 1px hsl(0deg 0% 0% / 0.075),
+        0 2px 2px hsl(0deg 0% 0% / 0.075),
+        0 4px 4px hsl(0deg 0% 0% / 0.075),
+        0 8px 8px hsl(0deg 0% 0% / 0.075),
+        0 16px 16px hsl(0deg 0% 0% / 0.075);
+    border-radius: 5px;
+    /* border: 5px solid var(--primary); */
+    padding-left: 20px;
+}
 </style>
