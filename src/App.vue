@@ -14,6 +14,7 @@ body {
 
 :root {
   --logotext: #9ebfe5;
+  --background-secondary: #87b3e6;
   --text: #EDF4F8;
   --background: #0E243A;
   --primary: #2985C2;

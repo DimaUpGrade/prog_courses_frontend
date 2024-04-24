@@ -1,0 +1,88 @@
+<template>
+    <div class="wrapper">
+        <NavBar></NavBar>
+        <div class="content" v-if="course_info !== null">
+            <h1>{{ course_info.title }}</h1>
+            <h3>by {{ course_info.author.username }}</h3>
+            <Tags v-bind:tags="course_info.tags" />
+            <h4>Платформа: {{ course_info.platform.title }}</h4>
+            <h5>Описание:</h5>
+            <p>{{ course_info.description }}</p>
+
+            <div id="course-link">
+                <p>Ссылка на курс</p>
+            </div>
+
+            <h4>Опубликовал: <u>{{ course_info.publisher.username }}</u></h4>
+            <p>{{ course_info }}</p>
+        </div>
+    </div>
+</template>
+
+<script>
+import NavBar from '@/components/NavBar.vue';
+import { API_URL, axios, get_course_data } from '../network';
+import router from '@/router';
+import Tags from '@/components/Tags.vue';
+
+export default {
+    name: 'CourseView',
+    components: {
+        NavBar,
+        Tags
+    },
+    data() {
+        return {
+            course_info: null
+        }
+    },
+    created() {
+        const id = this.$route.params.id
+        axios
+            .get(API_URL + '/api/courses/' + id + '/')
+            .then(response => (this.course_info = response.data))
+            .catch((error) => {
+                // alert(error.response.status);
+                switch (error.response.status) {
+                    case 404:
+                        router.replace({ path: '/page_not_found' });
+                        break;
+                    default:
+                        router.push({path: '/'})
+                }
+            })
+        // alert(id)
+        // this.course_info = get_course_data(id)
+        // alert(this.course_info)
+    }
+}
+</script>
+
+<style>
+.content {
+    margin: 20px;
+    padding: 20px;
+    max-width: 100% - 40px;
+    background-color: var(--background-secondary);
+    text-align: left;
+    box-shadow:
+        0 1px 1px hsl(0deg 0% 0% / 0.075),
+        0 2px 2px hsl(0deg 0% 0% / 0.075),
+        0 4px 4px hsl(0deg 0% 0% / 0.075),
+        0 8px 8px hsl(0deg 0% 0% / 0.075),
+        0 16px 16px hsl(0deg 0% 0% / 0.075);
+}
+
+#course-link {
+    background-color: var(--accent);
+    color: white;
+    width: 150px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+div#course-link p {
+    padding: 5px;
+}
+
+</style>

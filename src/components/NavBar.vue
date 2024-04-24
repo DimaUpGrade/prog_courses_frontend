@@ -1,14 +1,14 @@
 <template>
     <div class="navbar">
-        <a href="#" id="logo_title">prog_courses</a>
+        <router-link to="/" id="logo_title">prog_courses</router-link>
         <div class="navbar_item_general">
             <button class="dropbtn">Курсы
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="#">Ваши курсы</a>
-                <a href="#">Поиск курсов</a>
-                <a href="#">Предложить курс</a>
+                <a href="">Ваши курсы</a>
+                <router-link to="search">Поиск курсов</router-link>
+                <router-link to="/suggest_course">Предложить курс</router-link>
             </div>
         </div>
         <div class="navbar_item_general">
@@ -16,51 +16,78 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="#">О проекте</a>
+                <router-link to="about">О проекте</router-link>
                 <a href="#">Правила сайта</a>
                 <a href="#">Поддержать проект</a>
             </div>
         </div>
-        <div class="navbar_item_account">
-                <p id="user_info">username</p>
-                <!-- <p id="username_h2"><span id="username_span">Пользователь:</span> {{ username }}</p> -->
-                <!-- <LogOutButton /> -->
-                <p @click="toLogin" id="to_login">Войти</p>
+        <div class="navbar_item_general">
+            <button class="dropbtn">Новости сайта
+            </button>
+        </div>
+        <div class="navbar_item_general" id="user_manage">
+            <button class="dropbtn"> {{ username }}
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <p id="logout_text" @click="toLogOut">Выйти</p>
+            </div>
+        </div>
+        <div class="navbar_item_account" id="login_button">
+            <p @click="toLogin" id="to_login">Войти</p>
+        </div>
+        <div class="navbar_item_account" id="registration_button">
+            <p @click="toRegistration" id="to_registration">Зарегистрироваться</p>
         </div>
     </div>
-    <!-- <header>
-        <nav class="topnav">
-            <a href="#" id="logo-title">prog_courses</a>
-            <a href="#">Курсы</a>
-            <a href="#">О нас</a>
-        </nav>
-    </header> -->
 </template>
 
 <script>
 import router from '@/router';
-import { tokenIsSet } from '../validation'
+import { tokenIsSet } from '../validation';
+import { logout } from '../network';
 
 export default {
     methods: {
         toLogin() {
-            router.push({path: '/login'})
+            router.push({ path: 'login' });
+        },
+        toRegistration() {
+            router.push({ path: '/registration' });
+        },
+        toLogOut() {
+            logout();
+            router.push({path: 'home'});
+        },
+        toSuggestCourse() {
+            router.push({path: 'suggest_course'});
+        },
+        toSearchCourses() {
+            router.push({path: 'search'})
+        }
+
+    },
+    data() {
+        return {
+            username: 'test_username'
         }
     },
     mounted() {
-        
         if (tokenIsSet()) {
-            const username = localStorage.getItem('username');
-            $('#user_info').html(username);
-            
+            this.username = localStorage.getItem('username');
+            // $('#user_info').html(username);
+            $('#registration_button').css("display", "none");
+            $('#login_button').css("display", "none");
 
 
         }
         else {
-            $('#to_login').css("display", "flex");
-            $('#user_info').css("display", "none");
+            $('#user_manage').css("display", "none");
+            // $('#registration_button').css("display", "none");
+            // $('#login_button').css("display", "none");
         }
-    }
+    },
+    
 }
 
 </script>
@@ -78,6 +105,7 @@ body {
 .navbar {
     overflow: hidden;
     background-color: var(--background);
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
 }
 
 .navbar a {
@@ -85,13 +113,14 @@ body {
     font-size: 16px;
     color: white;
     text-align: center;
-    padding: 25px 16px;
+    padding: 22.5px 16px;
     text-decoration: none;
 }
 
 .navbar_item_account {
     float: right;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .navbar_item_account p {
@@ -105,15 +134,52 @@ body {
     margin: 0;
 }
 
+#user_manage {
+    float: right;
+    overflow: hidden;
+    min-width: 200px;
+    /* margin-right: 0px; */
+}
+
+#user_manage:hover {
+    background-color: var(--primary);
+}
+
+#logout_text {
+    margin: 0 0;
+    padding: 10px 10px 10px 10px;
+    
+}
+
+#logout_text:hover {
+    background-color: #ddd;
+}
+
+#user_manage .dropbtn {
+    
+}
+
+#user_manage_droppdown {
+    min-width: 118px;
+}
+
+#logout_button {
+    /* padding: 10px 10px; */
+}
+
+#user_auth_div p {
+    /* font-size: 8px; */
+}
+
 /* #user_info {
     
 } */
 
 #to_login {
-    display: none;
+    /* display: flex; */
 }
 
-.navbar_item_general{
+.navbar_item_general {
     float: left;
     overflow: hidden;
 }
@@ -141,6 +207,7 @@ body {
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
+    cursor: pointer;
 }
 
 .dropdown-content a {
@@ -154,6 +221,10 @@ body {
 
 .dropdown-content a:hover {
     background-color: #ddd;
+}
+
+.navbar_item_account:hover {
+    background-color: var(--primary);
 }
 
 .navbar_item_general:hover .dropdown-content {

@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         loginAccount() {
-            login_account($('#login').value, $('password').value)
+            login_account($('#login').val(), $('#password').val())
         }
     },
     mounted() {

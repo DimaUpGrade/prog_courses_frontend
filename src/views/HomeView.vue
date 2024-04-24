@@ -3,6 +3,10 @@
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <NavBar></NavBar>
   </div>
+
+  <div class="wrapper">
+    
+  </div>
 </template>
 
 <script>
@@ -16,3 +20,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.wrapper {
+  min-width: 80vw;
+  min-height: 80vh;
+  /* background-color: cyan; */
+}
+</style>

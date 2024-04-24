@@ -1,7 +1,13 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LogInView from '@/views/LogInView.vue'
 import SignUpView from '@/views/SignUpView.vue'
+import FormSuggestCourse from '@/views/FormSuggestCourse.vue'
+import SearchCourses from '@/views/SearchCourses.vue'
+import AboutView from '@/views/AboutView.vue'
+import UserCourses from '@/views/UserCourses.vue'
+import CourseView from '@/views/CourseView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 
 const routes = [
   {
@@ -18,6 +24,35 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LogInView
+  },
+  {
+    path: '/suggest_course',
+    name: 'suggest_course',
+    component: FormSuggestCourse
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: SearchCourses
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: AboutView
+  },
+  {
+    path: '/user_courses',
+    name: 'user_courses',
+    component: UserCourses
+  },
+  {
+    path: '/course/:id',
+    component: CourseView
+  },
+  {
+    path: '/page_not_found',
+    name: "page_not_found",
+    component: NotFoundView
   }
   // {
   //   path: '/about',
@@ -30,7 +65,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 

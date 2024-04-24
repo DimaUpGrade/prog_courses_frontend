@@ -1,9 +1,9 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg bg-color-background">
+    <!-- <nav class="navbar navbar-expand-lg bg-color-background">
       <div class=" container-fluid">
         <a class="navbar-brand text-color-logotext" href="#">prog_courses</a>
-        <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <div class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
@@ -29,13 +29,9 @@
               <a class="nav-link disabled" aria-disabled="true">Disabled</a>
             </li>
           </ul>
-          <!-- <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form> -->
         </div>
       </div>
-    </nav>
+    </nav> -->
   </div>
 </template>
 
@@ -49,7 +45,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!-- <style scoped>
 
 :root {
   --text: #EDF4F8;
@@ -96,4 +92,4 @@ a {
 }
 
 </style>
-
+ -->
