@@ -1,12 +1,11 @@
 <template>
-    <div class="review-list">
-        <div class="review-div" v-for="review in reviews">
+    <div class="comments-list">
+        <div class="comment-div" v-for="comment in comments">
             <div class="user-rating">
-                <p class="user">{{ review.user.username }}</p>
-                <p class="rating">{{ review.rating }}/10</p>
+                <p class="user">{{ comment.user.username }}</p>
             </div>
             
-            <p>{{ review.text_review }}</p>
+            <p>{{ comment.commentary_text }}</p>
         </div>
     </div>
 
@@ -14,12 +13,13 @@
 
 <script>
 export default {
-    props: ['reviews'],
+    props: ['comments'],
 }
 </script>
 
-<style scope>
-.review-list {
+<style>
+
+.comments-list {
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
@@ -34,24 +34,12 @@ export default {
     box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
 }
 
-.review-div {
-    width: 95%;
+.comment-div {
+    width: 99%;
     /* margin: 0 10px; */
     padding: 5px 10px;
     background-color: var(--primary);
     border-radius: 5px;
 }
 
-.user-rating {
-    display: flex;
-    flex-direction: row;
-}
-
-.user {
-    width: 90%;
-}
-
-.rating {
-    width: 5%;
-}
 </style>

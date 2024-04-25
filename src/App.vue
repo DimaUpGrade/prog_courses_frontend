@@ -13,6 +13,7 @@ body {
 }
 
 :root {
+  --dark-text: #062741;
   --logotext: #9ebfe5;
   --bright-background: #153758;
   --background-secondary: #87b3e6;

@@ -155,29 +155,31 @@ body {
     background-color: #ddd;
 }
 
-#user_manage .dropbtn {
-    
-}
+
 
 #user_manage_droppdown {
     min-width: 118px;
 }
 
+/* #user_manage .dropbtn {
+    
+}
+
 #logout_button {
-    /* padding: 10px 10px; */
+    
 }
 
 #user_auth_div p {
-    /* font-size: 8px; */
+    
 }
 
-/* #user_info {
+#user_info {
     
-} */
+}
 
 #to_login {
-    /* display: flex; */
-}
+
+} */
 
 .navbar_item_general {
     float: left;

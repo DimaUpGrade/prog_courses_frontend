@@ -26,9 +26,13 @@ export default {
 .tag {
     padding: 2px;
     margin: 0;
-    background-color: var(--accent);
+    background-color: var(--primary);
     border-radius: 5px;
 }
+
+/* .tag:hover {
+    cursor: pointer;
+} */
 
 div.tag p {
     padding: 3px 6px;
@@ -39,17 +43,19 @@ div.tag p {
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
+    /* border-bottom: 1px dotted black; */
 }
 
 .tooltip .tooltiptext {
     visibility: hidden;
-    min-width: 120px;
+    min-width: 250px;
+    /* max-width: 600px; */
     background-color: black;
     color: #fff;
-    text-align: center;
+    text-align: start;
     border-radius: 6px;
-    padding: 5px;
+    padding: 10px;
+    
 
     /* Position the tooltip */
     position: absolute;
