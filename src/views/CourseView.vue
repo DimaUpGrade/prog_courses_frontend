@@ -27,7 +27,7 @@
         <div id="comments-block" v-if="course_comments !== null">
             <div id="comments-content">
                 <h1>Комментарии</h1>
-                <Comments v-bind:comments="course_comments"/>
+                <Comments v-bind:comments="course_comments" />
             </div>
         </div>
     </div>
@@ -65,36 +65,62 @@ export default {
     created() {
         const id = this.$route.params.id
 
-        // get course info
-        axios
-            .get(API_URL + '/api/courses/' + id + '/')
-            .then(response => (this.course_info = response.data))
-            .catch((error) => {
-                // alert(error.response.status);
-                switch (error.response.status) {
-                    case 404:
-                        router.replace({ path: '/page_not_found' });
-                        break;
-                    default:
-                        router.push({ path: '/' })
-                }
-            })
-        
-        // get course's reviews
-        axios
-            .get(API_URL + '/api/courses/' + id + '/reviews/')
-            .then(response => (this.course_reviews = response.data.results))
+        if (Number.isInteger(+id)) {
+            axios
+                .get(API_URL + '/api/courses/' + id + '/')
+                .then(response => (this.course_info = response.data))
+                .catch((error) => {
+                    // alert(error.response.status);
+                    switch (error.response.status) {
+                        case 404:
+                            router.replace({ path: '/page_not_found' });
+                            break;
+                        default:
+                            router.push({ path: '/' })
+                    }
+                })
 
-        // get course's comments
-        axios
-            .get(API_URL + '/api/courses/' + id + '/comments/')
-            .then(response => (this.course_comments = response.data.results))
+            // get course's reviews
+            axios
+                .get(API_URL + '/api/courses/' + id + '/reviews/')
+                .then(response => (this.course_reviews = response.data.results))
+                .catch((error) => {
+                    // alert(error.response.status);
+                    switch (error.response.status) {
+                        case 404:
+
+                            break;
+                        default:
+                            router.push({ path: '/' })
+                    }
+                })
+
+            // get course's comments
+            axios
+                .get(API_URL + '/api/courses/' + id + '/comments/')
+                .then(response => (this.course_comments = response.data.results))
+                .catch((error) => {
+                    // alert(error.response.status);
+                    switch (error.response.status) {
+                        case 404:
+
+                            break;
+                        default:
+                            router.push({ path: '/' })
+                    }
+                })
+        }
+        else {
+            router.replace({ path: '/page_not_found' })
+        }
+
+        // get course info
+
     }
 }
 </script>
 
 <style>
-
 h1 {
     margin-top: 0;
 }
@@ -181,7 +207,7 @@ div#course-link p {
     margin: 0;
     /* justify-content: center; */
     min-height: 600px;
-    
+
     color: white;
     /* background-color: var(--additional-block-bg); */
     background-color: var(--bright-background);
@@ -200,5 +226,4 @@ div#course-link p {
     width: 100%;
     padding: 20px;
 }
-
 </style>
