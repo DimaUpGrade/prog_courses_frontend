@@ -1,20 +1,44 @@
 <template>
     <div class="review-list">
-        <div class="review-div" v-for="review in reviews">
+        <div class="review-div" v-for="review in reviews" @rerenderReviews="toParent()">
             <div class="user-rating">
                 <p class="user">{{ review.user.username }}</p>
                 <p class="rating">{{ review.rating }}/10</p>
             </div>
             
             <p>{{ review.text_review }}</p>
+            <div class="like-block">
+                <button class="like_button" v-bind:id="'review_likes_count_' + review.id" @click="likeR(review.id)">
+                    {{ review.likes_count }} <span class="material-symbols-rounded">thumb_up</span>
+                    
+                </button>
+            </div>
         </div>
     </div>
 
 </template>
 
-<script>
+<script scope>
+import { tokenIsSet } from '@/validation';
+import { likeReview } from '../network';
+
 export default {
     props: ['reviews'],
+    data() {
+        return {
+            isAuth: false
+        }
+    },
+    created() {
+        this.isAuth = tokenIsSet();
+        // alert(this.isAuth)
+    },
+    methods: {
+        async likeR(id) {
+            await likeReview(id)
+            this.$emit("rerenderReviews")
+        }
+    }
 }
 </script>
 
@@ -45,6 +69,7 @@ export default {
 .user-rating {
     display: flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .user {
@@ -52,6 +77,6 @@ export default {
 }
 
 .rating {
-    width: 5%;
+    width: 10%;
 }
 </style>

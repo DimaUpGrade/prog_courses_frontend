@@ -21,13 +21,13 @@
             </div>
             <div id="reviews-block" v-if="course_reviews !== null">
                 <h1>Отзывы</h1>
-                <Reviews v-bind:reviews="course_reviews" />
+                <Reviews @rerenderReviews="rerenderReviews()" v-bind:reviews="course_reviews" />
             </div>
         </div>
         <div id="comments-block" v-if="course_comments !== null">
             <div id="comments-content">
                 <h1>Комментарии</h1>
-                <Comments v-bind:comments="course_comments" />
+                <Comments @rerender="rerenderComments()" v-bind:comments="course_comments" />
             </div>
         </div>
     </div>
@@ -36,7 +36,8 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
-import { API_URL, axios, get_course_data } from '../network';
+import { API_URL, axios, getCourseInfo, getComments, getReviews } from '../network';
+import { tokenIsSet } from '../validation';
 import router from '@/router';
 import Tags from '@/components/Tags.vue';
 import Reviews from '@/components/Reviews.vue';
@@ -53,69 +54,34 @@ export default {
     methods: {
         openInNewTab(url) {
             window.open(url, '_blank', 'noreferrer')
+        },
+        async rerenderComments() {
+            this.course_comments = await getComments(this.id);
+        },
+        async rerenderReviews() {
+            this.course_reviews = await getReviews(this.id);
         }
     },
     data() {
         return {
             course_info: null,
             course_reviews: {},
-            course_comments: {}
+            course_comments: {},
+            id: 0
         };
     },
-    created() {
+    async created() {
         const id = this.$route.params.id
+        this.id = id
 
         if (Number.isInteger(+id)) {
-            axios
-                .get(API_URL + '/api/courses/' + id + '/')
-                .then(response => (this.course_info = response.data))
-                .catch((error) => {
-                    // alert(error.response.status);
-                    switch (error.response.status) {
-                        case 404:
-                            router.replace({ path: '/page_not_found' });
-                            break;
-                        default:
-                            router.push({ path: '/' })
-                    }
-                })
-
-            // get course's reviews
-            axios
-                .get(API_URL + '/api/courses/' + id + '/reviews/')
-                .then(response => (this.course_reviews = response.data.results))
-                .catch((error) => {
-                    // alert(error.response.status);
-                    switch (error.response.status) {
-                        case 404:
-
-                            break;
-                        default:
-                            router.push({ path: '/' })
-                    }
-                })
-
-            // get course's comments
-            axios
-                .get(API_URL + '/api/courses/' + id + '/comments/')
-                .then(response => (this.course_comments = response.data.results))
-                .catch((error) => {
-                    // alert(error.response.status);
-                    switch (error.response.status) {
-                        case 404:
-
-                            break;
-                        default:
-                            router.push({ path: '/' })
-                    }
-                })
+            this.course_info = await getCourseInfo(id)
+            this.course_comments = await getComments(id)
+            this.course_reviews = await getReviews(id)
         }
         else {
             router.replace({ path: '/page_not_found' })
         }
-
-        // get course info
-
     }
 }
 </script>

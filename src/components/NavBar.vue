@@ -50,20 +50,20 @@ import { logout } from '../network';
 export default {
     methods: {
         toLogin() {
-            router.push({ path: 'login' });
+            router.push({ path: '/login' });
         },
         toRegistration() {
             router.push({ path: '/registration' });
         },
         toLogOut() {
             logout();
-            router.push({path: 'home'});
+            router.go();
         },
         toSuggestCourse() {
-            router.push({path: 'suggest_course'});
+            router.push({path: '/suggest_course'});
         },
         toSearchCourses() {
-            router.push({path: 'search'})
+            router.push({path: '/search'})
         }
 
     },

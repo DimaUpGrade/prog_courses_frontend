@@ -1,19 +1,44 @@
 <template>
     <div class="comments-list">
-        <div class="comment-div" v-for="comment in comments">
-            <div class="user-rating">
+        <div class="comment-div" v-for="comment in comments"  @rerender="toParent()">
                 <p class="user">{{ comment.user.username }}</p>
-            </div>
             
             <p>{{ comment.commentary_text }}</p>
+            <div class="like-block">
+                <button class="like_button" v-bind:id="'comment_likes_count_' + comment.id" @click="like(comment.id)">
+                    {{ comment.likes_count }} <span class="material-symbols-rounded">thumb_up</span>
+                    
+                </button>
+            </div>
+            
+            <!-- <p class="likes">Нравится: {{ comment.likes_count }}</p> -->
+            
         </div>
     </div>
 
 </template>
 
-<script>
+<script scope>
+import { tokenIsSet } from '../validation';
+import { likeComment } from '../network';
+
 export default {
     props: ['comments'],
+    data() {
+        return {
+            isAuth: false
+        }
+    },
+    created() {
+        this.isAuth = tokenIsSet();
+        // alert(this.isAuth)
+    },
+    methods: {
+        async like(id) {
+            await likeComment(id)
+            this.$emit("rerender")
+        }
+    }
 }
 </script>
 
@@ -41,5 +66,28 @@ export default {
     background-color: var(--primary);
     border-radius: 5px;
 }
+
+/* .user-rating p {
+    margin: 10px 5px;
+} */
+
+.user {
+    margin-right: 80%;
+    min-width: 10%;
+    max-width: 20%;
+    height: 20px;
+}
+
+.like_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    letter-spacing: 6px;
+}
+/* 
+.likes {
+    
+} */
 
 </style>
