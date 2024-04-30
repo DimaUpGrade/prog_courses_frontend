@@ -10,11 +10,11 @@
         <h2>{{ status }}</h2>
     </div>
 
-    <input type="button" id="submit-button" @click="loginAccount" value="Войти">
+    <input type="button" id="submit-button" @click="loginAccountMethod" value="Войти">
 </template>
 
 <script>
-import { login_account } from '../network';
+import { loginAccount } from '../network';
 import { tokenIsSet } from '../validation';
 import router from '../router';
 
@@ -25,8 +25,8 @@ export default {
         };
     },
     methods: {
-        loginAccount() {
-            login_account($('#login').val(), $('#password').val())
+        loginAccountMethod() {
+            loginAccount($('#login').val(), $('#password').val())
         }
     },
     mounted() {

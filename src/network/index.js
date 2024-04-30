@@ -4,10 +4,16 @@ import { tokenIsSet } from '@/validation';
 const API_URL = "http://127.0.0.1:8000";
 
 
-function login_account(username_, password_) {
-    axios.post(API_URL + '/api/login/', {
-        username: username_,
-        password: password_
+async function loginAccount(username_, password_) {
+    let result;
+    result = await axios({
+        method: 'post',
+        url: `${API_URL}/api/login/`,
+        headers: {},
+        data: {
+            username: username_,
+            password: password_
+        }
     })
         .then((response) => {
             localStorage.setItem("token", response.data['Token']);
@@ -19,6 +25,21 @@ function login_account(username_, password_) {
             alert('ошибка')
             console.log(error);
         });
+
+    // axios.post(API_URL + '/api/login/', {
+    //     username: username_,
+    //     password: password_
+    // })
+    //     .then((response) => {
+    //         localStorage.setItem("token", response.data['Token']);
+    //         localStorage.setItem("username", username_);
+    //         router.back();
+    //         // router.push({ path: '/' });
+    //     })
+    //     .catch((error) => {
+    //         alert('ошибка')
+    //         console.log(error);
+    //     });
 }
 
 
@@ -41,26 +62,48 @@ function registration_account(username_, password_, email_) {
 }
 
 
-function logout() {
-    axios.post(API_URL + '/api/logout/', {}, {
+async function logout() {
+    let result;
+
+    result = await axios({
+        method: 'post',
+        url: `${API_URL}/api/logout/`,
         headers: {
             'Authorization': 'Token ' + localStorage.getItem("token")
         }
     })
-        .then((response) => {
-            alert("Успешный выход!");
+    .then((response) => {
+        alert("Успешный выход!");
             localStorage.removeItem("token");
             localStorage.removeItem("username");
+    })
+    .catch((error) => {
+        if (error.response.status) {
+            router.push({ path: '/' });
+            alert("Ошибка!");
+        }
+    })
 
-            // router.push({ path: '/' });
 
-        })
-        .catch((error) => {
-            if (error.response.status) {
-                router.push({ path: '/' });
-                alert("Ошибка!");
-            }
-        });
+    // await axios.post(API_URL + '/api/logout/', {}, {
+    //     headers: {
+    //         'Authorization': 'Token ' + localStorage.getItem("token")
+    //     }
+    // })
+    //     .then((response) => {
+    //         alert("Успешный выход!");
+    //         localStorage.removeItem("token");
+    //         localStorage.removeItem("username");
+
+    //         // router.push({ path: '/' });
+
+    //     })
+    //     .catch((error) => {
+    //         if (error.response.status) {
+    //             router.push({ path: '/' });
+    //             alert("Ошибка!");
+    //         }
+    //     });
 }
 
 
@@ -82,7 +125,11 @@ async function likeComment(id) {
         })
         .then(response => result = response)
         .catch((error) => {
-            alert(error)
+            // alert(error)
+            switch (error.response.status) {
+                case 401:
+                    alert("Оценивать комментарии могут только авторизованные пользователи!")
+            }
         })
 }
 
@@ -96,23 +143,30 @@ async function likeReview(id) {
         })
         .then(response => result = response)
         .catch((error) => {
-            alert(error)
+            // alert(error)
+            switch (error.response.status) {
+                case 401:
+                    alert("Оценивать отзывы могут только авторизованные пользователи!")
+            }
         })
 }
 
 
-
 async function getCourseInfo(id) {
     let result;
-    result = await axios.get(
-        (API_URL + '/api/courses/' + id + '/')
-    ).then(response => result = response).catch((error) => {
-        // alert(error)
-        switch (error.response.status) {
-            case 404:
-                router.replace({ path: '/page_not_found' })
-        }
+
+    result = await axios({
+        method: 'get',
+        url: `${API_URL}/api/courses/${id}/`,
+        headers: {}
     })
+        .then(response => result = response)
+        .catch((error) => {
+            switch (error.response.status) {
+                case 404:
+                    router.replace({ path: '/page_not_found' })
+            }
+        })
 
     return result.data;
 }
@@ -120,22 +174,25 @@ async function getCourseInfo(id) {
 
 async function getComments(id) {
     let result;
-
-    if (tokenIsSet) {
-        await axios
-            .get(API_URL + '/api/courses/' + id + '/comments/', {}, {
-                headers: {
-                    'Authorization': 'Token ' + localStorage.getItem("token")
-                }
-            })
+    if (tokenIsSet()) {
+        result = await axios({
+            method: 'get',
+            url: `${API_URL}/api/courses/${id}/comments/`,
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem("token")
+            }
+        })
             .then(response => result = response)
             .catch((error) => {
                 alert(error.response.status);
             })
     }
     else {
-        await axios
-            .get(API_URL + '/api/courses/' + id + '/comments/', {}, {})
+        result = await axios({
+            method: 'get',
+            url: `${API_URL}/api/courses/${id}/comments/`,
+            headers: {}
+        })
             .then(response => result = response)
             .catch((error) => {
                 alert(error.response.status);
@@ -148,22 +205,25 @@ async function getComments(id) {
 
 async function getReviews(id) {
     let result;
-
-    if (tokenIsSet) {
-        await axios
-            .get(API_URL + '/api/courses/' + id + '/reviews/', {}, {
-                headers: {
-                    'Authorization': 'Token ' + localStorage.getItem("token")
-                }
-            })
+    if (tokenIsSet()) {
+        result = await axios({
+            method: 'get',
+            url: `${API_URL}/api/courses/${id}/reviews/`,
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem("token")
+            }
+        })
             .then(response => result = response)
             .catch((error) => {
                 alert(error.response.status);
             })
     }
     else {
-        await axios
-            .get(API_URL + '/api/courses/' + id + '/reviews/', {}, {})
+        result = await axios({
+            method: 'get',
+            url: `${API_URL}/api/courses/${id}/reviews/`,
+            headers: {}
+        })
             .then(response => result = response)
             .catch((error) => {
                 alert(error.response.status);
@@ -178,7 +238,7 @@ async function getReviews(id) {
 export {
     API_URL,
     axios,
-    login_account,
+    loginAccount,
     registration_account,
     logout,
     get_course_data,

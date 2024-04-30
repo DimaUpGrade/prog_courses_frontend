@@ -27,6 +27,7 @@
         <div id="comments-block" v-if="course_comments !== null">
             <div id="comments-content">
                 <h1>Комментарии</h1>
+                <!-- <p>{{ course_comments }}</p> -->
                 <Comments @rerender="rerenderComments()" v-bind:comments="course_comments" />
             </div>
         </div>

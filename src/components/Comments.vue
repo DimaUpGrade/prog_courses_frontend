@@ -5,7 +5,7 @@
             
             <p>{{ comment.commentary_text }}</p>
             <div class="like-block">
-                <button class="like_button" v-bind:id="'comment_likes_count_' + comment.id" @click="like(comment.id)">
+                <button class="like_button" v-bind:class="'like_button_' + comment.is_liked" v-bind:id="'comment_likes_count_' + comment.id" @click="like(comment.id)">
                     {{ comment.likes_count }} <span class="material-symbols-rounded">thumb_up</span>
                     
                 </button>
@@ -42,7 +42,7 @@ export default {
 }
 </script>
 
-<style>
+<style scope>
 
 .comments-list {
     display: flex;
@@ -89,5 +89,10 @@ export default {
 .likes {
     
 } */
+
+.like_button_true {
+    background-color: rgb(74, 255, 113);
+    color: white;
+}
 
 </style>

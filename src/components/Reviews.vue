@@ -8,7 +8,7 @@
             
             <p>{{ review.text_review }}</p>
             <div class="like-block">
-                <button class="like_button" v-bind:id="'review_likes_count_' + review.id" @click="likeR(review.id)">
+                <button class="like_button" v-bind:class="'like_button_' + review.is_liked"  v-bind:id="'review_likes_count_' + review.id" @click="likeR(review.id)">
                     {{ review.likes_count }} <span class="material-symbols-rounded">thumb_up</span>
                     
                 </button>
@@ -79,4 +79,5 @@ export default {
 .rating {
     width: 10%;
 }
+
 </style>
