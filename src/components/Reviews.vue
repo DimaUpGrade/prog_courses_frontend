@@ -1,14 +1,15 @@
 <template>
     <div class="review-list">
-        <div class="review-div" v-for="review in reviews" @rerenderReviews="toParent()">
+        <div class="review-div" v-for="review in reviews">
             <div class="user-rating">
-                <p class="user">{{ review.user.username }}</p>
+                <p class="user"><b>{{ review.user.username }}</b></p>
                 <p class="rating">{{ review.rating }}/10</p>
             </div>
             
             <p>{{ review.text_review }}</p>
+            <p><i>{{ getDate(review.creation_date) }}</i></p>
             <div class="like-block">
-                <button class="like_button" v-bind:class="'like_button_' + review.is_liked"  v-bind:id="'review_likes_count_' + review.id" @click="likeR(review.id)">
+                <button class="button-shadow like_button" v-bind:class="'like_button_' + review.is_liked"  v-bind:id="'review_likes_count_' + review.id" @click="likeR(review.id)">
                     {{ review.likes_count }} <span class="material-symbols-rounded">thumb_up</span>
                     
                 </button>
@@ -19,7 +20,7 @@
 </template>
 
 <script scope>
-import { tokenIsSet } from '@/validation';
+import { tokenIsSet, formatDate } from '@/validation';
 import { likeReview } from '../network';
 
 export default {
@@ -36,7 +37,10 @@ export default {
     methods: {
         async likeR(id) {
             await likeReview(id)
-            this.$emit("rerenderReviews")
+            // this.$emit("rerenderReviews")
+        },
+        getDate (date) {
+            return formatDate(date)
         }
     }
 }
@@ -46,6 +50,7 @@ export default {
 .review-list {
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
     /* justify-content: center; */
     align-items: center;
     gap: 10px;
@@ -70,10 +75,13 @@ export default {
     display: flex;
     flex-direction: row;
     width: 100%;
+    height: 30px;
 }
 
 .user {
     width: 90%;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .rating {

@@ -1,6 +1,6 @@
 <template>
     <div class="tags-div">
-        <div class="tag" v-for="tag in tags">
+        <div class="tag button-shadow" v-for="tag in tags">
             <div class="tooltip">
                 <p>{{ tag.title }}</p>
                 <span class="tooltiptext">{{ tag.description }}</span>

@@ -46,7 +46,7 @@ const routes = [
     component: UserCourses
   },
   {
-    path: '/course/:id',
+    path: '/courses/:id',
     component: CourseView
   },
   {

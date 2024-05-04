@@ -33,6 +33,26 @@ body {
   color: #2c3e50;
 }
 
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+::-webkit-scrollbar:vertical {
+    width: 11px;
+}
+::-webkit-scrollbar:horizontal {
+    height: 11px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: none;
+    background-color: var(--background-secondary);
+}
+::-webkit-scrollbar-track { 
+    background-color: none;
+    border: none;
+    border-radius: 0px; 
+} 
+
 /* nav {
   padding: 30px;
 }

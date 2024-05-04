@@ -1,6 +1,6 @@
 <template>
+    <NavBar></NavBar>
     <div class="wrapper">
-        <NavBar></NavBar>
         <div class="content">
             <p>поиск курсов</p>
         </div>

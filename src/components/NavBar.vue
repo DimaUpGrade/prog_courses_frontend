@@ -7,7 +7,7 @@
             </button>
             <div class="dropdown-content">
                 <a href="">Ваши курсы</a>
-                <router-link to="search">Поиск курсов</router-link>
+                <router-link to="/search">Поиск курсов</router-link>
                 <router-link to="/suggest_course">Предложить курс</router-link>
             </div>
         </div>
@@ -57,13 +57,6 @@ export default {
         },
         toLogOut() {
             logout();
-            router.go();
-        },
-        toSuggestCourse() {
-            router.push({path: '/suggest_course'});
-        },
-        toSearchCourses() {
-            router.push({path: '/search'})
         }
 
     },
