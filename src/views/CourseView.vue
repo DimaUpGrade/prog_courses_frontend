@@ -25,7 +25,11 @@
             </div>
             <div id="reviews-block" v-if="course_reviews !== null">
                 <h1>Отзывы</h1>
-                <Reviews v-bind:reviews="course_reviews" />
+                <div id="reviews-content">
+                    <Reviews v-bind:reviews="course_reviews" />
+                    <button class="button-shadow button-general" id="open-review-form">Оставить отзыв</button>
+                    <h2>Спасибо за отзыв!</h2>
+                </div>
             </div>
         </div>
         <div id="comments-block" v-if="course_comments !== null">
@@ -71,9 +75,11 @@ export default {
         openInNewTab(url) {
             window.open(url, '_blank', 'noreferrer')
         },
+        
         // async rerenderComments() {
         //     this.comments_data = await getComments(this.id);
-        //     // this.course_comments = comments_data.results;
+        //     this.course_comments = comments_data.results;
+        //     this.more_comments_link = comments_data.next;
         // },
         // async rerenderReviews() {
         //     this.reviews_data = await getReviews(this.id);
@@ -115,9 +121,20 @@ export default {
             // this.course_comments.concat(new_data.data.results);
         },
         async sendComment() {
-            alert('pis')
-            let text =  $('#new-comment-textarea').val()
-            await postComment(this.id, text)
+            let text =  $('#new-comment-textarea').val();
+            let result;
+            result = await postComment(this.id, text);
+
+            
+
+            if (result.data == "Comment has been created") {
+                $('#new-comment-textarea').val("");
+                this.comments_data = await getComments(this.id);
+                this.course_comments = this.comments_data.results;
+                this.more_comments_link = this.comments_data.next;
+            }
+            
+            
         }
     },
     data() {
@@ -311,6 +328,22 @@ h1 {
     border-radius: 5px;
     border: none;
     padding: 5px;
+}
+
+#open-review-form {
+    border-radius: 5px;
+    border: none;
+    /* padding: 5px; */
+    width: 98%;
+    height: 50px;
+}
+
+#reviews-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
 }
 
 </style>

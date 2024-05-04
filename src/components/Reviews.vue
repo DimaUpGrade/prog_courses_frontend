@@ -1,5 +1,5 @@
 <template>
-    <div class="review-list">
+    <div class="reviews-list">
         <div class="review-div" v-for="review in reviews">
             <div class="user-rating">
                 <p class="user"><b>{{ review.user.username }}</b></p>
@@ -10,7 +10,7 @@
             <p><i>{{ getDate(review.creation_date) }}</i></p>
             <div class="like-block">
                 <button class="button-shadow like_button" v-bind:class="'like_button_' + review.is_liked"  v-bind:id="'review_likes_count_' + review.id" @click="likeR(review.id)">
-                    {{ review.likes_count }} <span class="material-symbols-rounded">thumb_up</span>
+                    <span v-bind:id="'review_likes_count_span_' + review.id">{{ review.likes_count }}</span> <span class="material-symbols-rounded">thumb_up</span>
                     
                 </button>
             </div>
@@ -32,11 +32,35 @@ export default {
     },
     created() {
         this.isAuth = tokenIsSet();
+        
         // alert(this.isAuth)
     },
     methods: {
         async likeR(id) {
             await likeReview(id)
+
+            if (this.isAuth == true) {
+                const name_button = '#review_likes_count_' + id;
+                const name_span = "#review_likes_count_span_" + id;
+
+                let likes = Number($(name_span).text());
+
+                if ($(name_button).hasClass('like_button_true')) {
+                    $(name_button).removeClass('like_button_true');
+                    $(name_button).addClass('like_button_false');
+                    likes -= 1;
+                    const test = likes.toString()
+                    $(name_span).html(test);
+                }
+                else {
+                    $(name_button).removeClass('like_button_false');
+                    $(name_button).addClass('like_button_true');
+                    likes += 1;
+                    const test = likes.toString()
+                    $(name_span).html(test);
+                }
+            }
+
             // this.$emit("rerenderReviews")
         },
         getDate (date) {
@@ -47,10 +71,9 @@ export default {
 </script>
 
 <style scope>
-.review-list {
+.reviews-list {
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
     /* justify-content: center; */
     align-items: center;
     gap: 10px;
@@ -61,6 +84,10 @@ export default {
     -webkit-box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
     -moz-box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
     box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
+    height: 500px;
+    width: 95%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .review-div {

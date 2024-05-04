@@ -88,7 +88,7 @@ async function logout() {
             router.go();
         })
         .catch((error) => {
-            if (error.response.status) {
+            if (error) {
                 router.push({ path: '/' });
                 swal("Ошибка!");
             }

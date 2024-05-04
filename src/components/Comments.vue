@@ -91,6 +91,7 @@ export default {
     -moz-box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
     box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .comment-div {
