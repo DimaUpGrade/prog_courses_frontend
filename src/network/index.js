@@ -136,7 +136,7 @@ async function likeReview(id) {
             switch (error.response.status) {
                 case 401:
                     swal("Оценивать отзывы могут только авторизованные пользователи!");
-                    // alert("Оценивать отзывы могут только авторизованные пользователи!")
+                // alert("Оценивать отзывы могут только авторизованные пользователи!")
             }
         })
 }
@@ -245,7 +245,6 @@ async function postComment(id_course_, commentary_text_) {
     let result;
 
     if (tokenIsSet()) {
-        alert('penis')
         result = await axios({
             method: 'post',
             url: `${API_URL}/api/comments/`,
@@ -253,20 +252,78 @@ async function postComment(id_course_, commentary_text_) {
                 'Authorization': 'Token ' + localStorage.getItem("token")
             },
             data: {
-                id_course: id_course_, 
+                id_course: id_course_,
                 commentary_text: commentary_text_
             }
         })
-        .then(response => result = response)
-        .catch((error) => {
-            alert(error)
-        })
+            .then(response => result = response)
+            .catch((error) => {
+                alert(error)
+            })
     }
     else {
         swal('Оставлять комментарии могут только авторизованные пользователи!')
     }
-    
+
     return result;
+}
+
+
+async function postReview(id_course_, text_review_, rating_) {
+    let result;
+
+    if (tokenIsSet) {
+        result = await axios({
+            method: 'post',
+            url: `${API_URL}/api/reviews/`,
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem("token")
+            },
+            data: {
+                id_course: id_course_,
+                text_review: text_review_,
+                rating: rating_
+            }
+        })
+            .then(response => {
+                result = response;
+                swal({
+                    title: "Спасибо за отзыв!",
+                    text: "Ваш отзыв был опубликован!",
+                    type: "success"
+                }).then(function() {
+                    router.back();
+                });
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+    else {
+        swal('Оставлять комментарии могут только авторизованные пользователи!')
+    }
+
+    return result;
+}
+
+
+async function isReviewExists(id_course) {
+    let result;
+
+    result = await axios({
+        method: 'get',
+        url: `${API_URL}/api/courses/${id_course}/is_review_exists/`,
+        headers: {
+            'Authorization': 'Token ' + localStorage.getItem("token")
+        }
+    })
+        .then(response => result = response)
+        .catch((error) => {
+            alert(error)
+        })
+
+    return result.data;
 }
 
 
@@ -282,5 +339,7 @@ export {
     getComments,
     getReviews,
     customGETRequest,
-    postComment
+    postComment,
+    postReview,
+    isReviewExists
 }

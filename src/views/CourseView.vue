@@ -11,7 +11,6 @@
                 <h4>Платформа: {{ course_info.platform.title }}</h4>
 
                 <h4 v-if="course_info.cost !== null">Стоимость: {{ course_info.cost }}</h4>
-
                 <h4 v-if="course_info.cost == null">Стоимость: не указано</h4>
 
                 <h4>Описание:</h4>
@@ -21,34 +20,32 @@
                     курс</a>
 
                 <h4>Опубликовал: <u>{{ course_info.publisher.username }}</u></h4>
-                <!-- <p>{{ course_info }}</p> -->
             </div>
             <div id="reviews-block" v-if="course_reviews !== null">
                 <h1>Отзывы</h1>
                 <div id="reviews-content">
                     <Reviews v-bind:reviews="course_reviews" />
-                    <button class="button-shadow button-general" id="open-review-form">Оставить отзыв</button>
-                    <h2>Спасибо за отзыв!</h2>
+                    <button class="button-shadow button-general" id="open-review-form"
+                        v-if="existing_review === false || isAuth === false" @click="goToReviewForm">Оставить отзыв</button>
+                    <h2 v-if="existing_review !== false && existing_review !== null">Спасибо за отзыв!</h2>
                 </div>
             </div>
         </div>
         <div id="comments-block" v-if="course_comments !== null">
             <div id="comments-content">
                 <h1>Комментарии</h1>
-                <!-- <p>{{ course_comments }}</p> -->
+                <p v-if="isAuth == false">Оставлять комментарии могут только авторизованные пользователи.</p>
                 <div id="new-comment-form" v-if="isAuth == true">
                     <div id="new-comment-form-content">
                         <textarea name="" id="new-comment-textarea"></textarea>
-                        <button class="button-shadow button-general" id="submit-new-comment" @click="sendComment">Отправить</button>
+                        <button class="button-shadow button-general" id="submit-new-comment"
+                            @click="sendComment">Отправить</button>
                     </div>
                 </div>
 
                 <Comments @loadComments="loadMoreComments()" v-bind:comments="course_comments"
                     v-bind:more_comments="more_comments_link" />
             </div>
-
-            <!-- <p>{{ course_comments }}</p> -->
-            <!-- <p>{{ comments_data.results }}</p> -->
         </div>
     </div>
 
@@ -56,7 +53,7 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
-import { API_URL, axios, customGETRequest, getCourseInfo, getComments, getReviews, postComment } from '../network';
+import { API_URL, axios, customGETRequest, getCourseInfo, getComments, getReviews, postComment, isReviewExists } from '../network';
 import router from '@/router';
 import Tags from '@/components/Tags.vue';
 import Reviews from '@/components/Reviews.vue';
@@ -75,16 +72,6 @@ export default {
         openInNewTab(url) {
             window.open(url, '_blank', 'noreferrer')
         },
-        
-        // async rerenderComments() {
-        //     this.comments_data = await getComments(this.id);
-        //     this.course_comments = comments_data.results;
-        //     this.more_comments_link = comments_data.next;
-        // },
-        // async rerenderReviews() {
-        //     this.reviews_data = await getReviews(this.id);
-        //     // this.course_reviews = reviews_data.results;
-        // },
         async loadMoreComments() {
             let new_data;
             // new_data = await customGETRequest(this.comments_data.next)
@@ -121,33 +108,33 @@ export default {
             // this.course_comments.concat(new_data.data.results);
         },
         async sendComment() {
-            let text =  $('#new-comment-textarea').val();
+            let text = $('#new-comment-textarea').val();
             let result;
             result = await postComment(this.id, text);
-
-            
-
             if (result.data == "Comment has been created") {
                 $('#new-comment-textarea').val("");
                 this.comments_data = await getComments(this.id);
                 this.course_comments = this.comments_data.results;
                 this.more_comments_link = this.comments_data.next;
             }
-            
-            
+        },
+        goToReviewForm() {
+            router.push('new_review');
         }
+
     },
     data() {
         return {
             comments_data: null,
             reviews_data: null,
             course_info: null,
-            course_reviews: {},
-            course_comments: {},
+            course_reviews: null,
+            course_comments: null,
             id: 0,
             more_comments_link: null,
-            isAuth: false
-        };
+            isAuth: false,
+            existing_review: null
+        }
     },
     async created() {
         const id = this.$route.params.id
@@ -158,14 +145,22 @@ export default {
         }
 
         if (Number.isInteger(+id)) {
-            this.course_info = await getCourseInfo(id)
+            this.course_info = await getCourseInfo(id);
 
-            this.comments_data = await getComments(id)
-            this.course_comments = this.comments_data.results
+            this.comments_data = await getComments(id);
+            this.course_comments = this.comments_data.results;
             this.more_comments_link = this.comments_data.next;
 
-            this.reviews_data = await getReviews(id)
-            this.course_reviews = this.reviews_data.results
+            this.reviews_data = await getReviews(id);
+            this.course_reviews = this.reviews_data.results;
+
+            if (this.isAuth === true) {
+                this.existing_review = await isReviewExists(id);
+            }
+            else {
+                this.existing_review = false;
+            }
+
         }
         else {
             router.replace({ path: '/page_not_found' })
@@ -346,4 +341,13 @@ h1 {
     gap: 20px;
 }
 
+.button-default-border {
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+}
+
+.white-color-font{
+    color: white;
+}
 </style>

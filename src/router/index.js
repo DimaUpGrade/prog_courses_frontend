@@ -8,6 +8,7 @@ import AboutView from '@/views/AboutView.vue'
 import UserCourses from '@/views/UserCourses.vue'
 import CourseView from '@/views/CourseView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
+import NewReviewView from '@/views/NewReviewView.vue'
 
 const routes = [
   {
@@ -53,6 +54,11 @@ const routes = [
     path: '/page_not_found',
     name: "page_not_found",
     component: NotFoundView
+  },
+  {
+    path: '/courses/:id/new_review',
+    name: "new_review",
+    component: NewReviewView
   }
   // {
   //   path: '/about',
