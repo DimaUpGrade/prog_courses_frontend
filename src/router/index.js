@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router
 import HomeView from '../views/HomeView.vue'
 import LogInView from '@/views/LogInView.vue'
 import SignUpView from '@/views/SignUpView.vue'
-import FormSuggestCourse from '@/views/FormSuggestCourse.vue'
+import SuggestCourseView from '@/views/SuggestCourseView.vue'
 import SearchCourses from '@/views/SearchCourses.vue'
 import AboutView from '@/views/AboutView.vue'
 import UserCourses from '@/views/UserCourses.vue'
@@ -29,7 +29,7 @@ const routes = [
   {
     path: '/suggest_course',
     name: 'suggest_course',
-    component: FormSuggestCourse
+    component: SuggestCourseView
   },
   {
     path: '/search',

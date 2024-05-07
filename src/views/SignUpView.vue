@@ -90,10 +90,10 @@ export default {
     gap: 1em;
     margin: 0;
 }
-
+/* 
 .data-labels p {
     
-}
+} */
 
 .data-fields {
     margin: 1em;

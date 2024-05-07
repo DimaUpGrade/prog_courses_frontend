@@ -291,7 +291,7 @@ async function postReview(id_course_, text_review_, rating_) {
                     title: "Спасибо за отзыв!",
                     text: "Ваш отзыв был опубликован!",
                     type: "success"
-                }).then(function() {
+                }).then(function () {
                     router.back();
                 });
 
@@ -301,10 +301,57 @@ async function postReview(id_course_, text_review_, rating_) {
             })
     }
     else {
-        swal('Оставлять комментарии могут только авторизованные пользователи!')
+        swal('Оставлять отзывы могут только авторизованные пользователи!')
     }
 
     return result;
+}
+
+
+async function postCourse(title_, platform_, course_link_, author_name_, author_link_, description_, cost_) {
+    let result;
+
+    if (tokenIsSet()) {
+        result = await axios({
+            method: 'post',
+            url: `${API_URL}/api/courses/`,
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem("token")
+            },
+            data: {
+                title: title_,
+                platform: platform_,
+                link: course_link_,
+                author_username: author_name_,
+                author_link: author_link_,
+                description: description_,
+                cost: cost_
+            }
+        })
+            .then(response => {
+                result = response;
+                swal({
+                    title: "Спасибо!",
+                    text: "Данные о курсе записаны и будут проверены модерацией!",
+                    type: "success"
+                }).then(function () {
+                    router.back();
+                });
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+    else {
+        alert('Предлагать курсы могут только авторизованные пользователи!');
+    }
+
+    if (result) {
+        return result;
+    }
+    
+    return null;
 }
 
 
@@ -341,5 +388,6 @@ export {
     customGETRequest,
     postComment,
     postReview,
+    postCourse,
     isReviewExists
 }

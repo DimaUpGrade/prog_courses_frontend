@@ -17,7 +17,7 @@
                     <option value="10">10</option>
                 </select>
             </div>
-            <textarea id="text-review-textarea" placeholder="Поделитесь своими впечатлениями от курса"></textarea>
+            <textarea id="text-review-textarea" class="default-text-area" placeholder="Поделитесь своими впечатлениями от курса"></textarea>
             <button class="button-shadow button-general button-default-border" @click="sendReview"
                 id="post-review-submit-button">Отправить</button>
         </div>
@@ -74,6 +74,9 @@ export default {
 #text-review-textarea {
     width: 100% - 20px;
     height: 500px;
+}
+
+.default-text-area {
     padding: 5px;
     border-radius: 5px;
     resize: none;
