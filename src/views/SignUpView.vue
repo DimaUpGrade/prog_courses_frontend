@@ -55,12 +55,11 @@ export default {
 
 <style>
 #registration-content {
-
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 80%;
+    /* width: 80%; */
     /* not working yet */
     /* height: 100%; */
     padding: 50px;

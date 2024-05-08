@@ -6,7 +6,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="">Ваши курсы</a>
+                <a href="" v-if="isAuth==true">Ваши курсы</a>
                 <router-link to="/search">Поиск курсов</router-link>
                 <router-link to="/suggest_course">Предложить курс</router-link>
             </div>
@@ -62,8 +62,12 @@ export default {
     },
     data() {
         return {
-            username: 'test_username'
+            username: 'username',
+            isAuth: null
         }
+    },
+    created () {
+        this.isAuth = tokenIsSet()
     },
     mounted() {
         if (tokenIsSet()) {
