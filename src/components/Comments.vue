@@ -78,7 +78,7 @@ export default {
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
-    width: 80% + scrollbar-width;
+    width: 95%;
     height: 600px;
     align-items: center;
     gap: 10px;

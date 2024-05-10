@@ -3,7 +3,15 @@
     <div class="wrapper-course-view" v-if="course_info !== null">
         <div class="course-and-reviews">
             <div id="course-info-block">
-                <h1>{{ course_info.title }}</h1>
+                <div id="course-header">
+                    <h1 id="course-title-h1">{{ course_info.title }}</h1>
+                    <div id="to-favorite-div">
+                        <img v-if="in_favorite === true" src="../assets/add_to_favorite_fill1.svg" alt="add to favorite"
+                            class="favorite_icon" @click="toFavorite()">
+                        <img v-if="in_favorite === false" src="../assets/add_to_favorite_fill0.svg"
+                            alt="add to favorite" class="favorite_icon" @click="toFavorite()">
+                    </div>
+                </div>
                 <h3>by {{ course_info.author.username }}</h3>
 
                 <Tags v-bind:tags="course_info.tags" />
@@ -26,7 +34,8 @@
                 <div id="reviews-content">
                     <Reviews v-bind:reviews="course_reviews" />
                     <button class="button-shadow button-general" id="open-review-form"
-                        v-if="existing_review === false || isAuth === false" @click="goToReviewForm">Оставить отзыв</button>
+                        v-if="existing_review === false || isAuth === false" @click="goToReviewForm">Оставить
+                        отзыв</button>
                     <h2 v-if="existing_review !== false && existing_review !== null">Спасибо за отзыв!</h2>
                 </div>
             </div>
@@ -35,6 +44,11 @@
             <div id="comments-content">
                 <h1>Комментарии</h1>
                 <p v-if="isAuth == false">Оставлять комментарии могут только авторизованные пользователи.</p>
+
+
+                <Comments @loadComments="loadMoreComments()" v-bind:comments="course_comments"
+                    v-bind:more_comments="more_comments_link" />
+
                 <div id="new-comment-form" v-if="isAuth == true">
                     <div id="new-comment-form-content">
                         <textarea name="" id="new-comment-textarea"></textarea>
@@ -43,8 +57,6 @@
                     </div>
                 </div>
 
-                <Comments @loadComments="loadMoreComments()" v-bind:comments="course_comments"
-                    v-bind:more_comments="more_comments_link" />
             </div>
         </div>
     </div>
@@ -120,8 +132,15 @@ export default {
         },
         goToReviewForm() {
             router.push('new_review');
+        },
+        toFavorite() {
+            if (this.isAuth) {
+                this.in_favorite = !this.in_favorite
+            }
+            else {
+                swal('Авторизуйтесь, чтобы добавлять курсы в закладки!')
+            }
         }
-
     },
     data() {
         return {
@@ -133,7 +152,8 @@ export default {
             id: 0,
             more_comments_link: null,
             isAuth: false,
-            existing_review: null
+            existing_review: null,
+            in_favorite: false
         }
     },
     async created() {
@@ -265,7 +285,6 @@ h1 {
     margin: 0;
     /* justify-content: center; */
     min-height: 600px;
-
     color: white;
     /* background-color: var(--additional-block-bg); */
     background-color: var(--bright-background);
@@ -281,8 +300,11 @@ h1 {
 }
 
 #comments-content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     padding: 20px;
+    gap: 20px;
 }
 
 .swal-text {
@@ -347,7 +369,36 @@ h1 {
     padding: 5px;
 }
 
-.white-color-font{
+.white-color-font {
     color: white;
 }
+
+#course-header {
+    display: flex;
+    flex-direction: row;
+}
+
+#course-title-h1 {
+    width: 95%;
+}
+
+#to-favorite-div {
+    width: 5%;
+    height: 50px;
+    margin: auto auto;
+    padding: 0;
+    /* background-color: red; */
+}
+
+.favorite_icon {
+    height: 2.5em;
+}
+
+.favorite_icon:hover {
+    cursor: pointer;
+}
+
+/* .material-symbols-outlined {
+    font-size: 50px;
+} */
 </style>
