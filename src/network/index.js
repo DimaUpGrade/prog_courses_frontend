@@ -374,6 +374,41 @@ async function isReviewExists(id_course) {
 }
 
 
+async function loadMore(link) {
+    let new_data;
+        new_data = await axios({
+            method: 'get',
+            url: `${link}`,
+            headers: {}
+        })
+            .then(response => new_data = response)
+            .catch((error) => {
+                alert(error.response.status)
+            })
+
+    return new_data
+}
+
+
+// async function getUserCourses() {
+//     let result;
+
+//     result = await axios({
+//         method: 'get',
+//         url: `${API_URL}/api/user_courses/`,
+//         headers: {
+//             'Authorization': 'Token ' + localStorage.getItem("token")
+//         }
+//     })
+//         .then(response => result = response)
+//         .catch((error) => {
+//             alert(error)
+//         })
+
+//     return result.data;
+// }
+
+
 export {
     API_URL,
     axios,
@@ -389,5 +424,6 @@ export {
     postComment,
     postReview,
     postCourse,
-    isReviewExists
+    isReviewExists,
+    loadMore
 }

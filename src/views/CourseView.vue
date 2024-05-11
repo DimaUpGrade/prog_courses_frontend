@@ -29,10 +29,10 @@
 
                 <h4>Опубликовал: <u>{{ course_info.publisher.username }}</u></h4>
             </div>
-            <div id="reviews-block" v-if="course_reviews !== null">
+            <div id="reviews-block" >
                 <h1>Отзывы</h1>
                 <div id="reviews-content">
-                    <Reviews v-bind:reviews="course_reviews" />
+                    <Reviews @loadReviews="loadMoreReviews()" v-bind:reviews="course_reviews" v-bind:more_reviews="more_reviews_link" v-if="course_reviews !== null"/>
                     <button class="button-shadow button-general" id="open-review-form"
                         v-if="existing_review === false || isAuth === false" @click="goToReviewForm">Оставить
                         отзыв</button>
@@ -40,14 +40,14 @@
                 </div>
             </div>
         </div>
-        <div id="comments-block" v-if="course_comments !== null">
+        <div id="comments-block">
             <div id="comments-content">
                 <h1>Комментарии</h1>
                 <p v-if="isAuth == false">Оставлять комментарии могут только авторизованные пользователи.</p>
 
 
                 <Comments @loadComments="loadMoreComments()" v-bind:comments="course_comments"
-                    v-bind:more_comments="more_comments_link" />
+                    v-bind:more_comments="more_comments_link"  v-if="course_comments !== null"/>
 
                 <div id="new-comment-form" v-if="isAuth == true">
                     <div id="new-comment-form-content">
@@ -65,7 +65,7 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
-import { API_URL, axios, customGETRequest, getCourseInfo, getComments, getReviews, postComment, isReviewExists } from '../network';
+import { API_URL, axios, customGETRequest, getCourseInfo, getComments, getReviews, postComment, isReviewExists, loadMore } from '../network';
 import router from '@/router';
 import Tags from '@/components/Tags.vue';
 import Reviews from '@/components/Reviews.vue';
@@ -86,38 +86,16 @@ export default {
         },
         async loadMoreComments() {
             let new_data;
-            // new_data = await customGETRequest(this.comments_data.next)
-
-            // временное решение, связанное с промисами, 
-            // желательно позже перенести данную реализацию в network
-            if (this.isAuth) {
-                new_data = await axios({
-                    method: 'get',
-                    url: `${this.more_comments_link}`,
-                    headers: {
-                        'Authorization': 'Token ' + localStorage.getItem("token")
-                    }
-                })
-                    .then(response => new_data = response)
-                    .catch((error) => {
-                        alert(error.response.status)
-                    })
-            }
-            else {
-                new_data = await axios({
-                    method: 'get',
-                    url: `${this.comments_data.next}`,
-                    headers: {}
-                })
-                    .then(response => new_data = response)
-                    .catch((error) => {
-                        alert(error.response.status)
-                    })
-            }
-
+            new_data = await loadMore(this.more_comments_link)
             this.more_comments_link = new_data.data.next
             this.course_comments = this.course_comments.concat(new_data.data.results)
             // this.course_comments.concat(new_data.data.results);
+        },
+        async loadMoreReviews() {
+            let new_data;
+            new_data = await loadMore(this.more_reviews_link)
+            this.more_reviews_link = new_data.data.next
+            this.course_reviews = this.course_reviews.concat(new_data.data.results)
         },
         async sendComment() {
             let text = $('#new-comment-textarea').val();
@@ -151,6 +129,7 @@ export default {
             course_comments: null,
             id: 0,
             more_comments_link: null,
+            more_reviews_link: null,
             isAuth: false,
             existing_review: null,
             in_favorite: false
@@ -166,21 +145,22 @@ export default {
 
         if (Number.isInteger(+id)) {
             this.course_info = await getCourseInfo(id);
+            if (this.course_info !== null) {
+                this.comments_data = await getComments(id);
+                this.course_comments = this.comments_data.results;
+                this.more_comments_link = this.comments_data.next;
 
-            this.comments_data = await getComments(id);
-            this.course_comments = this.comments_data.results;
-            this.more_comments_link = this.comments_data.next;
+                this.reviews_data = await getReviews(id);
+                this.course_reviews = this.reviews_data.results;
+                this.more_reviews_link = this.reviews_data.next;
 
-            this.reviews_data = await getReviews(id);
-            this.course_reviews = this.reviews_data.results;
-
-            if (this.isAuth === true) {
-                this.existing_review = await isReviewExists(id);
+                if (this.isAuth === true) {
+                    this.existing_review = await isReviewExists(id);
+                }
+                else {
+                    this.existing_review = false;
+                }
             }
-            else {
-                this.existing_review = false;
-            }
-
         }
         else {
             router.replace({ path: '/page_not_found' })

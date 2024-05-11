@@ -1,6 +1,6 @@
 <template>
     <div class="reviews-list">
-        <div class="review-div" v-for="review in reviews">
+        <div class="review-div" v-for="review in reviews" @loadReviews="toParent()">
             <div class="user-rating">
                 <p class="user"><b>{{ review.user.username }}</b></p>
                 <p class="rating">{{ review.rating }}/10</p>
@@ -15,8 +15,11 @@
                 </button>
             </div>
         </div>
+        
+        <button id="more-reviews-button" class="button-general shadow-button" v-if="more_reviews !== null"
+            @click="getReviews()">Загрузить
+            ещё</button>
     </div>
-
 </template>
 
 <script scope>
@@ -24,7 +27,7 @@ import { tokenIsSet, formatDate } from '@/validation';
 import { likeReview } from '../network';
 
 export default {
-    props: ['reviews'],
+    props: ['reviews', 'more_reviews'],
     data() {
         return {
             isAuth: false
@@ -32,7 +35,6 @@ export default {
     },
     created() {
         this.isAuth = tokenIsSet();
-        
         // alert(this.isAuth)
     },
     methods: {
@@ -65,6 +67,9 @@ export default {
         },
         getDate (date) {
             return formatDate(date)
+        },
+        getReviews() {
+            this.$emit("loadReviews")
         }
     }
 }
@@ -113,6 +118,23 @@ export default {
 
 .rating {
     width: 10%;
+}
+
+#more-reviews-button {
+    padding: 20px;
+    width: 30%;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px hsl(0deg 0% 0% / 0.075),
+        0 2px 2px hsl(0deg 0% 0% / 0.075),
+        0 4px 4px hsl(0deg 0% 0% / 0.075),
+        0 8px 8px hsl(0deg 0% 0% / 0.075),
+        0 16px 16px hsl(0deg 0% 0% / 0.075);
+}
+
+#more-reviews-button:hover {
+    color: white;
+    background-color: var(--bright-background);
 }
 
 </style>
