@@ -145,18 +145,36 @@ async function likeReview(id) {
 async function getCourseInfo(id) {
     let result;
 
-    result = await axios({
-        method: 'get',
-        url: `${API_URL}/api/courses/${id}/`,
-        headers: {}
-    })
-        .then(response => result = response)
-        .catch((error) => {
-            switch (error.response.status) {
-                case 404:
-                    router.replace({ path: '/page_not_found' })
+    if (tokenIsSet()) {
+        result = await axios({
+            method: 'get',
+            url: `${API_URL}/api/courses/${id}/`,
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem("token")
             }
         })
+            .then(response => result = response)
+            .catch((error) => {
+                switch (error.response.status) {
+                    case 404:
+                        router.replace({ path: '/page_not_found' })
+                }
+            })
+    }
+    else {
+        result = await axios({
+            method: 'get',
+            url: `${API_URL}/api/courses/${id}/`,
+            headers: {}
+        })
+            .then(response => result = response)
+            .catch((error) => {
+                switch (error.response.status) {
+                    case 404:
+                        router.replace({ path: '/page_not_found' })
+                }
+            })
+    }
 
     return result.data;
 }
@@ -350,7 +368,7 @@ async function postCourse(title_, platform_, course_link_, author_name_, author_
     if (result) {
         return result;
     }
-    
+
     return null;
 }
 
@@ -376,37 +394,55 @@ async function isReviewExists(id_course) {
 
 async function loadMore(link) {
     let new_data;
-        new_data = await axios({
-            method: 'get',
-            url: `${link}`,
-            headers: {}
+    new_data = await axios({
+        method: 'get',
+        url: `${link}`,
+        headers: {}
+    })
+        .then(response => new_data = response)
+        .catch((error) => {
+            alert(error.response.status)
         })
-            .then(response => new_data = response)
-            .catch((error) => {
-                alert(error.response.status)
-            })
 
     return new_data
 }
 
 
-// async function getUserCourses() {
-//     let result;
+async function getUserCourses() {
+    let result;
+    result = await axios({
+        method: 'get',
+        url: `${API_URL}/api/user_courses/`,
+        headers: {
+            'Authorization': 'Token ' + localStorage.getItem("token")
+        }
+    })
+        .then(response => result = response)
+        .catch((error) => {
+            alert(error)
+        })
 
-//     result = await axios({
-//         method: 'get',
-//         url: `${API_URL}/api/user_courses/`,
-//         headers: {
-//             'Authorization': 'Token ' + localStorage.getItem("token")
-//         }
-//     })
-//         .then(response => result = response)
-//         .catch((error) => {
-//             alert(error)
-//         })
+    return result.data;
+}
 
-//     return result.data;
-// }
+
+async function addCourseToFavorite(id_course) {
+    let result;
+
+    result = await axios({
+        method: 'patch',
+        url: `${API_URL}/api/courses/${id_course}/add_to_favorite/`,
+        headers: {
+            'Authorization': 'Token ' + localStorage.getItem("token")
+        }
+    })
+        .then(response => result = response)
+        .catch((error) => {
+            alert(error)
+        })
+
+    return result.data;
+}
 
 
 export {
@@ -425,5 +461,7 @@ export {
     postReview,
     postCourse,
     isReviewExists,
-    loadMore
+    loadMore,
+    getUserCourses,
+    addCourseToFavorite
 }

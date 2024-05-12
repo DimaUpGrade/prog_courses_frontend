@@ -7,12 +7,14 @@
                     <h1 id="course-title-h1">{{ course_info.title }}</h1>
                     <div id="to-favorite-div">
                         <img v-if="in_favorite === true" src="../assets/add_to_favorite_fill1.svg" alt="add to favorite"
-                            class="favorite_icon" @click="toFavorite()">
+                            class="favorite_icon" @click="toFavorite()" title="Убрать из избранного">
                         <img v-if="in_favorite === false" src="../assets/add_to_favorite_fill0.svg"
-                            alt="add to favorite" class="favorite_icon" @click="toFavorite()">
+                            alt="add to favorite" class="favorite_icon" @click="toFavorite()"
+                            title="Добавить в избранное">
                     </div>
                 </div>
-                <h3>by {{ course_info.author.username }}</h3>
+                <h3>by <a class="course_author_link" v-bind:href="course_info.author.link">{{ course_info.author.username
+                        }}</a></h3>
 
                 <Tags v-bind:tags="course_info.tags" />
 
@@ -29,10 +31,11 @@
 
                 <h4>Опубликовал: <u>{{ course_info.publisher.username }}</u></h4>
             </div>
-            <div id="reviews-block" >
+            <div id="reviews-block">
                 <h1>Отзывы</h1>
                 <div id="reviews-content">
-                    <Reviews @loadReviews="loadMoreReviews()" v-bind:reviews="course_reviews" v-bind:more_reviews="more_reviews_link" v-if="course_reviews !== null"/>
+                    <Reviews @loadReviews="loadMoreReviews()" v-bind:reviews="course_reviews"
+                        v-bind:more_reviews="more_reviews_link" v-if="course_reviews !== null" />
                     <button class="button-shadow button-general" id="open-review-form"
                         v-if="existing_review === false || isAuth === false" @click="goToReviewForm">Оставить
                         отзыв</button>
@@ -43,12 +46,10 @@
         <div id="comments-block">
             <div id="comments-content">
                 <h1>Комментарии</h1>
-                <p v-if="isAuth == false">Оставлять комментарии могут только авторизованные пользователи.</p>
-
-
                 <Comments @loadComments="loadMoreComments()" v-bind:comments="course_comments"
-                    v-bind:more_comments="more_comments_link"  v-if="course_comments !== null"/>
+                    v-bind:more_comments="more_comments_link" v-if="course_comments !== null" />
 
+                <p v-if="isAuth == false">Оставлять комментарии могут только авторизованные пользователи.</p>
                 <div id="new-comment-form" v-if="isAuth == true">
                     <div id="new-comment-form-content">
                         <textarea name="" id="new-comment-textarea"></textarea>
@@ -56,7 +57,6 @@
                             @click="sendComment">Отправить</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -65,7 +65,7 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
-import { API_URL, axios, customGETRequest, getCourseInfo, getComments, getReviews, postComment, isReviewExists, loadMore } from '../network';
+import { API_URL, axios, customGETRequest, getCourseInfo, getComments, getReviews, postComment, isReviewExists, loadMore, addCourseToFavorite } from '../network';
 import router from '@/router';
 import Tags from '@/components/Tags.vue';
 import Reviews from '@/components/Reviews.vue';
@@ -109,11 +109,21 @@ export default {
             }
         },
         goToReviewForm() {
-            router.push('new_review');
+            if (this.isAuth == true) {
+                router.push('new_review');
+            }
+            else {
+                swal({
+                    text: "Оставлять отзывы могут только авторизованные пользователи!",
+                    type: "success"
+                })
+            }
         },
-        toFavorite() {
+        async toFavorite() {
             if (this.isAuth) {
-                this.in_favorite = !this.in_favorite
+                this.in_favorite = !this.in_favorite;
+                let result;
+                result = await addCourseToFavorite(this.id);
             }
             else {
                 swal('Авторизуйтесь, чтобы добавлять курсы в закладки!')
@@ -132,7 +142,7 @@ export default {
             more_reviews_link: null,
             isAuth: false,
             existing_review: null,
-            in_favorite: false
+            in_favorite: null
         }
     },
     async created() {
@@ -153,6 +163,8 @@ export default {
                 this.reviews_data = await getReviews(id);
                 this.course_reviews = this.reviews_data.results;
                 this.more_reviews_link = this.reviews_data.next;
+
+                this.in_favorite = this.course_info.in_favorite
 
                 if (this.isAuth === true) {
                     this.existing_review = await isReviewExists(id);
@@ -381,4 +393,8 @@ h1 {
 /* .material-symbols-outlined {
     font-size: 50px;
 } */
+
+.course_author_link {
+    color: white;
+}
 </style>

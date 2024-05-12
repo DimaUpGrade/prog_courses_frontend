@@ -1,7 +1,7 @@
 <template>
     <NavBar></NavBar>
     <div class="wrapper">
-        <div id="suggest-course-content">
+        <div id="suggest-course-content" v-if="isAuth === true">
             <div class="center-div">
                 <h1 class="white-color-font">Форма предложения курса</h1>
                 <br>
@@ -55,11 +55,16 @@
 <script>
 import NavBar from '@/components/NavBar.vue'
 import { postCourse } from '@/network'
+import { tokenIsSet } from '@/validation';
+import router from '@/router';
 
 export default {
     name: 'SuggestCourseView',
     components: {
         NavBar
+    },
+    data() {
+        isAuth: false;
     },
     methods: {
         sendCourse() {
@@ -146,6 +151,20 @@ export default {
 
 
             // postCourse(title, platform, course_link, author_name, author_link, description, cost);
+        }
+    },
+    created() {
+        if (tokenIsSet()) {
+            this.isAuth = true;
+        }
+        else {
+            swal({
+                title: "Ошибка!",
+                text: "Предлагать курсы могут только авторизованные пользователи!",
+                type: "success"
+            }).then(function () {
+                router.back();
+            });
         }
     }
 }

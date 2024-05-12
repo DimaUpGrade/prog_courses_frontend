@@ -6,7 +6,7 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <router-link to="/user_courses" v-if="isAuth==true">Ваши курсы</router-link>
+                <router-link to="/user_courses">Ваши курсы</router-link>
                 <router-link to="/search">Поиск курсов</router-link>
                 <router-link to="/suggest_course">Предложить курс</router-link>
             </div>

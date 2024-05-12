@@ -5,17 +5,19 @@
                 <p class="user"><b>{{ review.user.username }}</b></p>
                 <p class="rating">{{ review.rating }}/10</p>
             </div>
-            
+
             <p>{{ review.text_review }}</p>
             <p><i>{{ getDate(review.creation_date) }}</i></p>
             <div class="like-block">
-                <button class="button-shadow like_button" v-bind:class="'like_button_' + review.is_liked"  v-bind:id="'review_likes_count_' + review.id" @click="likeR(review.id)">
-                    <span v-bind:id="'review_likes_count_span_' + review.id">{{ review.likes_count }}</span> <span class="material-symbols-rounded">thumb_up</span>
-                    
+                <button class="button-shadow like_button" v-bind:class="'like_button_' + review.is_liked"
+                    v-bind:id="'review_likes_count_' + review.id" @click="likeR(review.id)">
+                    <span v-bind:id="'review_likes_count_span_' + review.id">{{ review.likes_count }}</span> <span
+                        class="material-symbols-rounded">thumb_up</span>
+
                 </button>
             </div>
         </div>
-        
+
         <button id="more-reviews-button" class="button-general shadow-button" v-if="more_reviews !== null"
             @click="getReviews()">Загрузить
             ещё</button>
@@ -65,7 +67,7 @@ export default {
 
             // this.$emit("rerenderReviews")
         },
-        getDate (date) {
+        getDate(date) {
             return formatDate(date)
         },
         getReviews() {
@@ -136,5 +138,4 @@ export default {
     color: white;
     background-color: var(--bright-background);
 }
-
 </style>
