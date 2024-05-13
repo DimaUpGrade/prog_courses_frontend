@@ -26,7 +26,7 @@
                 <h4>Описание:</h4>
                 <p>{{ course_info.description }}</p>
 
-                <a v-bind:href="course_info.link" id="course-link" class="button-shadow button-general">Ссылка на
+                <a v-bind:href="course_info.link" class="course-link button-shadow button-general">Ссылка на
                     курс</a>
 
                 <h4>Опубликовал: <u>{{ course_info.publisher.username }}</u></h4>
@@ -226,7 +226,7 @@ h1 {
     color: white;
 }
 
-#course-link {
+.course-link {
     width: 150px;
     text-align: center;
     border-radius: 5px;

@@ -25,6 +25,10 @@
             <button class="dropbtn">Новости сайта
             </button>
         </div>
+        <div class="navbar_item_general">
+            <button class="dropbtn">Сотрудничество
+            </button>
+        </div>
         <div class="navbar_item_general" id="user_manage">
             <button class="dropbtn"> {{ username }}
                 <i class="fa fa-caret-down"></i>

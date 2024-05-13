@@ -7,7 +7,7 @@
             </div>
             <!-- <p v-if="user_courses != null"> {{ this.user_courses }}</p> -->
 
-            <Courses v-bind:user_courses="user_courses" />
+            <Courses v-bind:courses="user_courses" />
         </div>
     </div>
 </template>
@@ -61,6 +61,12 @@ export default {
     color: white;
     width: 95%;
     border-radius: 5px;
+    box-shadow:
+        0 1px 1px hsl(0deg 0% 0% / 0.075),
+        0 2px 2px hsl(0deg 0% 0% / 0.075),
+        0 4px 4px hsl(0deg 0% 0% / 0.075),
+        0 8px 8px hsl(0deg 0% 0% / 0.075),
+        0 16px 16px hsl(0deg 0% 0% / 0.075);
 }
 
 #user-courses-content {
@@ -89,6 +95,6 @@ export default {
 }
 
 .course-item-content {
-    padding: 20px 20px 10px 30px;
+    padding: 20px 20px 20px 30px;
 }
 </style>
