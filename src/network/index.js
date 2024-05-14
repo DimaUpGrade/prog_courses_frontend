@@ -82,15 +82,27 @@ async function logout() {
     })
         .then((response) => {
             // delete this
-            alert("Успешный выход!");
-            localStorage.removeItem("token");
-            localStorage.removeItem("username");
-            router.go();
+            swal({
+                title: "Успешный выход!",
+                text: "Вы вышли из аккаунта!",
+                type: "success"
+            }).then(function () {
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+                router.go();
+            });
+            // alert("Успешный выход!");
+
         })
         .catch((error) => {
             if (error) {
-                router.push({ path: '/' });
-                swal("Ошибка!");
+                swal({
+                    title: "Произошла ошибка!",
+                    text: "Что-то пошло не так...",
+                    type: "success"
+                }).then(function () {
+                    router.push({ path: '/' });
+                });
             }
         })
 }
@@ -445,6 +457,31 @@ async function addCourseToFavorite(id_course) {
 }
 
 
+async function searchCourses(search_string, is_free) {
+    let result;
+    let url
+
+    if (is_free === true) {
+        url = `${API_URL}/api/courses/?search_query=${search_string}&only_free=true`
+    }
+    else {
+        url = `${API_URL}/api/courses/?search_query=${search_string}`
+    }
+
+    result = await axios({
+        method: 'get',
+        url: `${url}`,
+        headers: {}
+    })
+        .then(response => result = response)
+        .catch((error) => {
+            swal(error.response.status);
+        })
+
+    return result.data;
+}
+
+
 export {
     API_URL,
     axios,
@@ -463,5 +500,6 @@ export {
     isReviewExists,
     loadMore,
     getUserCourses,
-    addCourseToFavorite
+    addCourseToFavorite,
+    searchCourses
 }

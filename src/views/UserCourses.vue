@@ -61,12 +61,19 @@ export default {
     color: white;
     width: 95%;
     border-radius: 5px;
+    padding: 15px;
     box-shadow:
         0 1px 1px hsl(0deg 0% 0% / 0.075),
         0 2px 2px hsl(0deg 0% 0% / 0.075),
         0 4px 4px hsl(0deg 0% 0% / 0.075),
         0 8px 8px hsl(0deg 0% 0% / 0.075),
         0 16px 16px hsl(0deg 0% 0% / 0.075);
+}
+
+.header-user-courses h1 {
+    padding: 30px;
+    text-align: center;
+    margin: 0;
 }
 
 #user-courses-content {
@@ -80,21 +87,4 @@ export default {
     background-color: var(--background-secondary);
 }
 
-.header-user-courses {
-    height: 100px;
-}
-
-.header-user-courses h1 {
-    padding: 30px;
-    text-align: center;
-    margin: 0;
-}
-
-.course-item {
-    min-height: 200px;
-}
-
-.course-item-content {
-    padding: 20px 20px 20px 30px;
-}
 </style>

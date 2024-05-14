@@ -397,4 +397,12 @@ h1 {
 .course_author_link {
     color: white;
 }
+
+.defult_link {
+    color: white;
+}
+
+.defult_link:visited {
+    color: white;
+}
 </style>

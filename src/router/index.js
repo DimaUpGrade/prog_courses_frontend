@@ -9,6 +9,12 @@ import UserCourses from '@/views/UserCourses.vue'
 import CourseView from '@/views/CourseView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import NewReviewView from '@/views/NewReviewView.vue'
+import SearchResults from '@/views/SearchResults.vue'
+import DonationView from '@/views/DonationView.vue'
+import RulesView from '@/views/RulesView.vue'
+import PartnershipView from '@/views/ParnershipView.vue'
+import NewsView from '@/views/NewsView.vue'
+import ReportView from '@/views/ReportView.vue'
 
 const routes = [
   {
@@ -37,9 +43,39 @@ const routes = [
     component: SearchCourses
   },
   {
+    path: '/search/results/',
+
+    component: SearchResults
+  },
+  {
     path: '/about',
     name: 'about',
     component: AboutView
+  },
+  {
+    path: '/donation',
+    name: 'donation',
+    component: DonationView
+  },
+  {
+    path: '/rules',
+    name: 'rules',
+    component: RulesView
+  },
+  {
+    path: '/partnership',
+    name: 'partnership',
+    component: PartnershipView
+  },
+  {
+    path: '/report',
+    name: 'report',
+    component: ReportView
+  },
+  {
+    path: '/news',
+    name: 'news',
+    component: NewsView
   },
   {
     path: '/user_courses',

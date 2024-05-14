@@ -16,20 +16,19 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <router-link to="about">О проекте</router-link>
-                <a href="#">Правила сайта</a>
-                <a href="#">Поддержать проект</a>
+                <router-link to="/about">О проекте</router-link>
+                <router-link to="/rules">Правила сайта</router-link>
+                <router-link to="/donation">Поддержать проект</router-link>
+                <router-link to="/partnership">Сотрудничество</router-link>
             </div>
         </div>
         <div class="navbar_item_general">
-            <button class="dropbtn">Новости сайта
-            </button>
+            <router-link to="/news" id="" class="dropbtn">Новости сайта</router-link>
         </div>
         <div class="navbar_item_general">
-            <button class="dropbtn">Сотрудничество
-            </button>
+            <router-link to="/report" id="" class="dropbtn">Сообщить об ошибке</router-link>
         </div>
-        <div class="navbar_item_general" id="user_manage">
+        <div v-if="isAuth === true" class="navbar_item_general" id="user_manage">
             <button class="dropbtn"> {{ username }}
                 <i class="fa fa-caret-down"></i>
             </button>
@@ -37,10 +36,10 @@
                 <p id="logout_text" @click="toLogOut">Выйти</p>
             </div>
         </div>
-        <div class="navbar_item_account" id="login_button">
+        <div v-if="isAuth === false" class="navbar_item_account" id="login_button">
             <p @click="toLogin" id="to_login">Войти</p>
         </div>
-        <div class="navbar_item_account" id="registration_button">
+        <div v-if="isAuth === false" class="navbar_item_account" id="registration_button">
             <p @click="toRegistration" id="to_registration">Зарегистрироваться</p>
         </div>
     </div>
@@ -66,29 +65,20 @@ export default {
     },
     data() {
         return {
-            username: 'username',
+            username: null,
             isAuth: null
         }
     },
     created () {
         this.isAuth = tokenIsSet()
-    },
-    mounted() {
         if (tokenIsSet()) {
+            this.isAuth = true;
             this.username = localStorage.getItem('username');
-            // $('#user_info').html(username);
-            $('#registration_button').css("display", "none");
-            $('#login_button').css("display", "none");
-
-
         }
         else {
-            $('#user_manage').css("display", "none");
-            // $('#registration_button').css("display", "none");
-            // $('#login_button').css("display", "none");
+            this.isAuth = false;
         }
-    },
-    
+    }    
 }
 
 </script>

@@ -35,6 +35,10 @@ export default {
 </script>
 
 <style>
+.course-item-header {
+    min-width: 300px;
+}
+
 .course-item-title {
     width: 95%;
 }
@@ -42,5 +46,17 @@ export default {
 .course-item-title:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.header-user-courses {
+    height: 100px;
+}
+
+.course-item {
+    min-height: 200px;
+}
+
+.course-item-content {
+    padding: 20px 20px 20px 30px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <NavBar></NavBar>
     <div class="wrapper">
-
+        <h1>Сотрудничество</h1>
     </div>
 </template>
 

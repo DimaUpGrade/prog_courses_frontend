@@ -1,7 +1,9 @@
 <template>
+  <NavBar></NavBar>
   <div class="wrapper">
-    <NavBar></NavBar>
-    <h1>This is an about page</h1>
+    
+    <h1>О проекте</h1>
+    <p>Данный сайт был разработан в рамках выпускной квалификационной работы. Однако в результате появилась идея развивать его дальше.</p>
   </div>
 </template>
 
