@@ -59,9 +59,9 @@ export default {
 .default-item-in-wrapper {
     background-color: var(--bright-background);
     color: white;
-    width: 95%;
+    width: 90%;
     border-radius: 5px;
-    padding: 15px;
+    padding: 15px 2%;
     box-shadow:
         0 1px 1px hsl(0deg 0% 0% / 0.075),
         0 2px 2px hsl(0deg 0% 0% / 0.075),

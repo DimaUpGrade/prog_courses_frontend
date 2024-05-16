@@ -5,6 +5,17 @@ import swal from 'sweetalert';
 const API_URL = "http://127.0.0.1:8000";
 
 
+function defaultErrorHandler() {
+    swal({
+        title: "Ошибка!",
+        text: "Что-то пошло не так...",
+        type: "success"
+    }).then(function () {
+        
+    });
+}
+
+
 async function loginAccount(username_, password_) {
     let result;
     result = await axios({
@@ -23,7 +34,8 @@ async function loginAccount(username_, password_) {
             // router.push({ path: '/' });
         })
         .catch((error) => {
-            swal('ошибка')
+            defaultErrorHandler()
+            // swal('ошибка')
             // console.log(error);
         });
 }
@@ -47,7 +59,11 @@ async function registration_account(username_, password_, email_) {
         })
         .catch((error) => {
             if (error.response.status == '500') {
-                swal("Неверные данные регистрации!");
+                swal({
+                    title: "Успешный выход!",
+                    text: "Вы вышли из аккаунта!",
+                    type: "success"
+                })
             }
             // console.log(error);
         });
@@ -457,15 +473,23 @@ async function addCourseToFavorite(id_course) {
 }
 
 
-async function searchCourses(search_string, is_free) {
+async function searchCourses(search_string, is_free, tag) {
     let result;
-    let url
+    let url;
+
+    if (tag == null) {
+        tag = '';
+    }
+
+    if (search_string == null) {
+        search_string = '';
+    }
 
     if (is_free === true) {
-        url = `${API_URL}/api/courses/?search_query=${search_string}&only_free=true`
+        url = `${API_URL}/api/courses/?search_query=${search_string}&only_free=true&tag=${tag}`
     }
     else {
-        url = `${API_URL}/api/courses/?search_query=${search_string}`
+        url = `${API_URL}/api/courses/?search_query=${search_string}&tag=${tag}`
     }
 
     result = await axios({
@@ -476,6 +500,50 @@ async function searchCourses(search_string, is_free) {
         .then(response => result = response)
         .catch((error) => {
             swal(error.response.status);
+        })
+
+    return result.data;
+}
+
+
+async function getAllTags() {
+    let result;
+    result = await axios({
+        method: 'get',
+        url: `${API_URL}/api/tags/`,
+        headers: {}
+    })
+        .then(response => result = response)
+        .catch((error) => {
+            swal({
+                title: "Ошибка!",
+                text: "Что-то пошло не так...",
+                type: "success"
+            }).then(function () {
+                
+            });
+        })
+
+    return result.data;
+}
+
+
+async function getNews() {
+    let result;
+    result = await axios({
+        method: 'get',
+        url: `${API_URL}/api/news_posts/`,
+        headers: {}
+    })
+        .then(response => result = response)
+        .catch((error) => {
+            swal({
+                title: "Ошибка!",
+                text: "Что-то пошло не так...",
+                type: "success"
+            }).then(function () {
+                
+            });
         })
 
     return result.data;
@@ -501,5 +569,7 @@ export {
     loadMore,
     getUserCourses,
     addCourseToFavorite,
-    searchCourses
+    searchCourses,
+    getAllTags,
+    getNews
 }

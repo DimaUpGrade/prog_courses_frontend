@@ -1,7 +1,7 @@
 <template>
     <NavBar></NavBar>
     <div class="wrapper">
-        <div id="registration-content">
+        <div class="registration-content">
             <h1>Регистрация</h1>
             <div class="label-and-fields-block">
                 <div class="data-labels">
@@ -54,7 +54,7 @@ export default {
 </script>
 
 <style>
-#registration-content {
+.registration-content {
     display: flex;
     flex-direction: column;
     justify-content: center;

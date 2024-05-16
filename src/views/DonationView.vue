@@ -1,7 +1,11 @@
 <template>
     <NavBar></NavBar>
-    <div class="wrapper">
-        <h1>Поддержать проект</h1>
+    <div class="wrapper info-default-wrapper">
+        <div class="info-default-content">
+            <h1>Поддержать проект</h1>
+            <p>Вы можете поддержать проект финансово по следующим реквизитам:</p>
+            <p>ЮMoney: <i>410012268795733</i></p>
+        </div>
     </div>
 </template>
 
@@ -16,6 +20,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

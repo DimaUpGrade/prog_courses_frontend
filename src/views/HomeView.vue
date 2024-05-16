@@ -20,34 +20,45 @@
         </div>
       </div>
       <SearchBar v-bind:show_header="true"></SearchBar>
+      <div class="tag-search">
+        <h1>Или попробуйте поиск по тегу (beta)</h1>
+        <Tags v-if="tags !== null" v-bind:tags="tags_data" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'
+import NavBar from '@/components/NavBar.vue';
+import { getAllTags } from '@/network';
 import { tokenIsSet } from '@/validation';
 import SearchBar from '@/components/SearchBar.vue';
+import Tags from '@/components/Tags.vue';
 
 export default {
   name: 'HomeView',
   components: {
     NavBar,
-    SearchBar
+    SearchBar,
+    Tags
   },
 
   data() {
     return {
       isAuth: null,
-      username: null
+      username: null,
+      tags_data: null
     }
   },
 
-  created() {
+  async created() {
     this.isAuth = tokenIsSet();
     if (this.isAuth == true) {
       this.username = localStorage.getItem('username')
     }
+    let tags_data;
+    tags_data = await getAllTags()
+    this.tags_data = tags_data
   }
 }
 </script>
@@ -105,7 +116,7 @@ export default {
 #home-view-item-welcome {
   display: flex;
   width: 100%;
-  height: 200px;
+  height: 130px;
   margin: 0;
   padding: 40px 20px;
   flex-direction: row;
@@ -131,4 +142,24 @@ export default {
 #welcome-logo-text {
   text-shadow: rgb(220, 220, 255) 1px 0 2px;
 }
+
+.tag-search {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90%;
+  min-height: 200px;
+  background-color: var(--bright-background);
+  color: white;
+  padding: 3% 2% 0 2%;
+  border-radius: 5px;
+  box-shadow:
+    0 1px 1px hsl(0deg 0% 0% / 0.075),
+    0 2px 2px hsl(0deg 0% 0% / 0.075),
+    0 4px 4px hsl(0deg 0% 0% / 0.075),
+    0 8px 8px hsl(0deg 0% 0% / 0.075),
+    0 16px 16px hsl(0deg 0% 0% / 0.075);
+}
+
 </style>

@@ -2,6 +2,9 @@
     <NavBar></NavBar>
     <div class="wrapper" id="wrapper-search-results">
         <SearchBar v-bind:show_header="false"></SearchBar>
+        <div class="tag" v-if="tag != ''" @click="removeTag()" title="Отключить фильтр по тегу">
+            <p>{{ tag }}</p>
+        </div>
         <Courses v-if="courses != null" v-bind:courses="courses" />
         <div v-if="courses != null">
             <h2 v-if="results_data.count == 0">Ничего не найдено</h2>
@@ -15,6 +18,7 @@
 import NavBar from '@/components/NavBar.vue'
 import Courses from '@/components/Courses.vue'
 import SearchBar from '@/components/SearchBar.vue';
+import router from '@/router';
 import { loadMore, searchCourses } from '@/network';
 // import { tokenIsSet } from '@/validation';
 // import Tags from '@/components/Tags.vue';
@@ -31,6 +35,7 @@ export default {
         return {
             results_data: null,
             courses: null,
+            tag: null,
             search_query: null,
             only_free: null,
             more_link: null,
@@ -44,7 +49,8 @@ export default {
         async rerenderResults() {
             this.search_query = this.$route.query.search_query
             this.only_free = this.$route.query.only_free
-            this.results_data = await searchCourses(this.search_query, this.only_free)
+            this.tag = this.$route.query.tag
+            this.results_data = await searchCourses(this.search_query, this.only_free, this.tag)
             this.courses = this.results_data.results
         },
         async getMoreCourses() {
@@ -52,12 +58,17 @@ export default {
             new_data = await loadMore(this.more_link)
             this.more_link = new_data.data.next
             this.courses = this.courses.concat(new_data.data.results)
+        },
+        removeTag() {
+            this.tag = "";
+            router.push({path:`/search/results/`, query:{search_query: this.search_query, only_free: this.only_free, tag: this.tag}});
         }
     },
     async created() {
         this.search_query = this.$route.query.search_query
         this.only_free = this.$route.query.only_free
-        this.results_data = await searchCourses(this.search_query, this.only_free)
+        this.tag = this.$route.query.tag
+        this.results_data = await searchCourses(this.search_query, this.only_free, this.tag)
         this.courses = this.results_data.results
         this.more_link = this.results_data.next
 

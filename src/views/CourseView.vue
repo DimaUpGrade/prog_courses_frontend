@@ -32,7 +32,17 @@
                 <h4>Опубликовал: <u>{{ course_info.publisher.username }}</u></h4>
             </div>
             <div id="reviews-block">
-                <h1>Отзывы</h1>
+                <div class="review-block-header">
+                    <div class="review-block-header-title">
+                        <h1>Отзывы</h1>
+                    </div>
+                    <div v-if="course_info.rating == 0" class="review-block-header-rating">
+                        <h2>–</h2>
+                    </div>
+                    <div v-if="course_info.rating != 0" v-bind:style="{'background-color': getColorForRating(course_info.rating)}" class="review-block-header-rating">
+                        <h2>{{ course_info.rating }}/10</h2>
+                    </div>
+                </div>
                 <div id="reviews-content">
                     <Reviews @loadReviews="loadMoreReviews()" v-bind:reviews="course_reviews"
                         v-bind:more_reviews="more_reviews_link" v-if="course_reviews !== null" />
@@ -71,6 +81,7 @@ import Tags from '@/components/Tags.vue';
 import Reviews from '@/components/Reviews.vue';
 import Comments from '@/components/Comments.vue';
 import { tokenIsSet } from '@/validation';
+import { getColorByValue } from '@/service';
 
 export default {
     name: 'CourseView',
@@ -128,6 +139,9 @@ export default {
             else {
                 swal('Авторизуйтесь, чтобы добавлять курсы в закладки!')
             }
+        },
+        getColorForRating(rating) {
+            return getColorByValue(rating)
         }
     },
     data() {
@@ -184,6 +198,36 @@ export default {
 <style>
 h1 {
     margin-top: 0;
+}
+
+.review-block-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    gap: 20%;
+    margin: 10px 0 30px 0;
+}
+
+.review-block-header-rating {
+    width: 30%;
+    text-align: center;
+    background-color: var(--primary);
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.review-block-header-rating h2 {
+    margin: 0;
+}
+
+.review-block-header-title {
+    width: 50%;
+}
+
+.review-block-header-title h1 {
+    padding: 0;
+    margin: 0;
 }
 
 .wrapper-course-view {
@@ -243,7 +287,7 @@ h1 {
 #course-info-block {
     width: 69%;
     background-color: var(--bright-background);
-    padding: 20px;
+    padding: 35px 20px 20px 30px;
     border-radius: 5px;
     box-shadow:
         0 1px 1px hsl(0deg 0% 0% / 0.075),

@@ -1,25 +1,32 @@
 <template>
     <div class="tags-div">
-        <div class="tag button-shadow" v-for="tag in tags">
+        <div class="tag button-shadow" v-for="tag in tags" @click="searchByTag(tag.title)">
             <div class="tooltip">
                 <p>{{ tag.title }}</p>
                 <span class="tooltiptext">{{ tag.description }}</span>
             </div>
 
         </div>
-
     </div>
 </template>
 
 <script>
+import router from '../router';
+
 export default {
     props: ['tags'],
+    methods: {
+        searchByTag(tag_title) {
+            router.push({path:`/search/results/`, query:{tag: tag_title}});
+        }
+    }
 }
 </script>
 
 <style>
 .tags-div {
     display: inline-flex;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
@@ -28,16 +35,19 @@ export default {
     margin: 0;
     background-color: var(--primary);
     border-radius: 5px;
+    color: white;
 }
 
-/* .tag:hover {
+.tag:hover {
     cursor: pointer;
-} */
+    background-color: white;
+    color: var(--primary);
+}
 
 div.tag p {
     padding: 3px 6px;
     margin: 0;
-    color: white;
+    
 }
 
 .tooltip {

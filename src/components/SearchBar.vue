@@ -25,11 +25,12 @@ export default {
         return {
             search_query: "",
             only_free: false,
+            tag: ""
         }
     },
     methods: {
         goToSearchResults() {
-            router.push({path:`/search/results/`, query:{search_query: this.search_query, only_free: this.only_free}});
+            router.push({path:`/search/results/`, query:{search_query: this.search_query, only_free: this.only_free, tag: this.tag}});
         }
     }
 }

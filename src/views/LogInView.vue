@@ -1,15 +1,19 @@
 <template>
     <NavBar></NavBar>
     <div class="wrapper">
-        <div>
-            <p>Логин:</p>
-            <input id="login" type="text">
-            <p>Пароль:</p>
-            <input id="password" type="text">
-            <div>
-                <h2>{{ status }}</h2>
+        <div class="registration-content">
+            <h1>Авторзиация</h1>
+            <div class="label-and-fields-block">
+                <div class="data-labels">
+                    <p>Логин:</p>
+                    <p>Пароль:</p>
+                </div>
+                <div class="data-fields">
+                    <input id="login" type="text">
+                    <input id="password" type="password">
+                </div>
             </div>
-            <input type="button" id="submit-button" @click="loginAccountMethod" value="Войти">
+            <button class="button-shadow button-general button-default-border" id="submit-button" @click="loginAccountMethod">Войти</button>
         </div>
     </div>    
 </template>
@@ -42,3 +46,13 @@ export default {
 }
 
 </script>
+
+<style>
+
+#submit-button {
+    padding: 10px;
+    margin-bottom: 7em;
+    width: 30em;
+}
+
+</style>
