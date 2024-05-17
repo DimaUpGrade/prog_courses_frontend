@@ -31,7 +31,6 @@ async function loginAccount(username_, password_) {
             localStorage.setItem("token", response.data['Token']);
             localStorage.setItem("username", username_);
             router.back();
-            // router.push({ path: '/' });
         })
         .catch((error) => {
             defaultErrorHandler()
@@ -58,31 +57,9 @@ async function registrationAccount(username_, password_, email_) {
             await loginAccount(username_, password_);
         })
         .catch((error) => {
-            if (error.response.status == '500') {
-                swal({
-                    title: "Ошибка!",
-                    text: "Что-то пошло не так...",
-                    type: "success"
-                })
-            }
+            defaultErrorHandler()
             // console.log(error);
         });
-
-
-    // axios.post(API_URL + '/api/registration/', {
-    //     username: username_,
-    //     password: password_,
-    //     email: email_
-    // })
-    //     .then((response) => {
-    //         login_account(username_, password_)
-    //     })
-    //     .catch((error) => {
-    //         if (error.response.status == '500') {
-    //             this.status = "Неверные данные регистрации!";
-    //         }
-    //         console.log(error);
-    //     });
 }
 
 

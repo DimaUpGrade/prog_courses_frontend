@@ -10,9 +10,9 @@
                     <p>Пароль:</p>
                 </div>
                 <div class="data-fields">
-                    <input id="email" type="text">
-                    <input id="login" type="text">
-                    <input id="password" type="password">
+                    <input id="email" type="text" v-model="email">
+                    <input id="login" type="text" v-model="login">
+                    <input id="password" type="password" v-model="password">
                 </div>
             </div>
             <button class="button-shadow button-general button-default-border" id="refistration-button" @click="registrationAccount">Зарегистрироваться</button>
@@ -34,14 +34,16 @@ export default {
     },
     data() {
         return {
-            status: ""
+            email: "",
+            login: "",
+            password: ""
         };
     },
     methods: {
         async registrationAccount() {
-            await registrationAccount($('#login').val(), $('#password').val(), $('#email').val())
-            loginAccount($('#login').val(), $('#password').val())
-            router.replace({ path: '/' });
+            await registrationAccount(this.login, this.password, this.email);
+            // loginAccount($('#login').val(), $('#password').val());
+            // router.replace({ path: '/' });
         }
     },
     mounted() {
@@ -59,9 +61,6 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* width: 80%; */
-    /* not working yet */
-    /* height: 100%; */
     padding: 50px;
     gap: 5em;
     box-shadow:
@@ -74,7 +73,6 @@ export default {
     background-color: var(--bright-background);
     border-radius: 5px;
     margin: 0px;
-    /* padding: 0px; */
 }
 
 .label-and-fields-block {
