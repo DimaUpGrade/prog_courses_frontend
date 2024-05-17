@@ -12,7 +12,7 @@
                 <div class="data-fields">
                     <input id="email" type="text">
                     <input id="login" type="text">
-                    <input id="password" type="text">
+                    <input id="password" type="password">
                 </div>
             </div>
             <button class="button-shadow button-general button-default-border" id="refistration-button" @click="registrationAccount">Зарегистрироваться</button>
@@ -23,7 +23,7 @@
 
 <script>
 
-import { loginAccount, registration_account } from '../network';
+import { loginAccount, registrationAccount } from '../network';
 import { tokenIsSet } from '../validation';
 import router from '../router';
 import NavBar from '@/components/NavBar.vue';
@@ -39,7 +39,7 @@ export default {
     },
     methods: {
         async registrationAccount() {
-            await registration_account($('#login').val(), $('#password').val(), $('#email').val())
+            await registrationAccount($('#login').val(), $('#password').val(), $('#email').val())
             loginAccount($('#login').val(), $('#password').val())
             router.replace({ path: '/' });
         }

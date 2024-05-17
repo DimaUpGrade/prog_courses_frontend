@@ -16,30 +16,33 @@
                         <h4 class="white-color-font" id="description-label">Описание:</h4>
                     </div>
                     <div class="data-fields" id="fields-suggest-course">
-                        <input type="text" id="title-course-input" placeholder="Введите название курса">
+                        <input type="text" id="title-course-input" placeholder="Введите название курса" v-model="title">
                         <p class="error-p" id="title-course-input-error-p"></p>
 
                         <input type="text" id="platform-course-input"
-                            placeholder="Укажите платформу, на которой находится курс (YouTube, Stepik или др.)">
+                            placeholder="Укажите платформу, на которой находится курс (YouTube, Stepik или др.)"
+                            v-model="platform">
                         <p class="error-p" id="platform-course-input-error-p"></p>
 
-                        <input type="text" id="link-course-course-input" placeholder="Вставьте ссылку на курс">
+                        <input type="text" id="link-course-course-input" placeholder="Вставьте ссылку на курс"
+                            v-model="course_link">
                         <p class="error-p" id="link-course-course-input-error-p"></p>
 
                         <input type="text" id="author-name-course-input"
-                            placeholder="Укажите имя или никнейм автора курса">
+                            placeholder="Укажите имя или никнейм автора курса" v-model="author_username">
                         <p class="error-p" id="author-name-course-input-error-p"></p>
 
                         <input type="text" id="author-link-course-input"
-                            placeholder="Укажите ссылку на страницу автора курса">
+                            placeholder="Укажите ссылку на страницу автора курса" v-model="author_link">
                         <p class="error-p" id="author-link-course-input-error-p"></p>
 
                         <input type="text" id="cost-course-input"
-                            placeholder='Укажите заявленную стоимость курса (или напишите "Бесплатно", если курс бесплатный)'>
+                            placeholder='Укажите заявленную стоимость курса (или напишите "Бесплатно", если курс бесплатный)'
+                            v-model="cost">
                         <p class="error-p" id="cost-course-input-error-p"></p>
 
                         <textarea class="default-text-area" id="suggest-course-textarea"
-                            placeholder="Укажите описание курса"></textarea>
+                            placeholder="Укажите описание курса" v-model="description"></textarea>
                         <p class="error-p" id="suggest-course-textarea-error-p"></p>
 
 
@@ -55,7 +58,7 @@
 <script>
 import NavBar from '@/components/NavBar.vue'
 import { postCourse } from '@/network'
-import { tokenIsSet } from '@/validation';
+import { tokenIsSet, isValueURL } from '@/validation';
 import router from '@/router';
 
 export default {
@@ -64,93 +67,142 @@ export default {
         NavBar
     },
     data() {
-        isAuth: false;
+        return {
+            isAuth: false,
+            title: "",
+            platform: "",
+            course_link: "",
+            author_username: "",
+            author_link: "",
+            description: "",
+            cost: "",
+            title_validation: false,
+            platform_validation: false,
+            author_username_validation: false,
+            description_validation: false,
+            cost_validation: false,
+            course_link_validation: false,
+            author_link_validation: false,
+        }
     },
     methods: {
         sendCourse() {
-            const title_element = $('#title-course-input');
-            const platform_element = $('#platform-course-input');
-            const course_link_element = $('#link-course-course-input');
-            const author_name_element = $('#author-name-course-input');
-            const author_link_element = $('#author-link-course-input');
-            const description_element = $('#suggest-course-textarea');
-            const cost_element = $('#cost-course-input');
-
-            let title = title_element.val();
-            let platform = platform_element.val();
-            let course_link = course_link_element.val();
-            let author_name = author_name_element.val();
-            let author_link = author_link_element.val();
-            let description = description_element.val();
-            let cost = cost_element.val();
-
-            const url_expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
-            const url_regex = new RegExp(url_expression);
-
-            let validation = true;
-
-            function isFieldEmpty(element) {
-                const id_element = element.attr('id');
-                const id_p = `#${id_element}-error-p`;
-                const error_p = $(id_p)
-
-                if (element.val().trim() == "") {
-                    element.css('border', '2px solid red')
-                    error_p.html("Поле не может быть пустым!");
-                    return false;
-                }
-                else {
-                    error_p.html("");
-                    element.css('border', '2px solid greenyellow');
-                    return true;
-                }
-            }
-
-            if (isFieldEmpty(title_element) == false) { validation = false }
-            if (isFieldEmpty(platform_element) == false) { validation = false }
-            if (isFieldEmpty(course_link_element) == false) { validation = false }
-            if (isFieldEmpty(author_name_element) == false) { validation = false }
-            if (isFieldEmpty(description_element) == false) { validation = false }
-            if (isFieldEmpty(cost_element) == false) { validation = false }
-
-            // //It doesn't work yet
-            // validation = (
-            //     isFieldEmpty(title_element) && 
-            //     isFieldEmpty(platform_element) && 
-            //     isFieldEmpty(course_link_element) && 
-            //     isFieldEmpty(author_name_element) && 
-            //     isFieldEmpty(description_element) && 
-            //     isFieldEmpty(cost_element)
-            // );
-
-            // alert(validation);
-
-
-            if (course_link.match(url_regex)) {
-                course_link_element.css('border', '2px solid greenyellow');
-                $('#link-course-course-input-error-p').html("");
-            } else {
-                course_link_element.css('border', '2px solid red');
-                $('#link-course-course-input-error-p').html("Проверьте правильность ввода ссылки!");
-                validation = false;
-            }
-
-            if (author_link.match(url_regex)) {
-                $('#author-link-course-input-error-p').html("");
-                author_link_element.css('border', '2px solid greenyellow');
+            if (this.title_validation == true &&
+                this.platform_validation == true &&
+                this.author_username_validation == true &&
+                this.description_validation == true &&
+                this.cost_validation == true &&
+                this.course_link_validation == true &&
+                this.author_link_validation == true) {
+                // alert('penis')
+                postCourse(this.title, this.platform, this.course_link, this.author_username, this.author_link, this.description, this.cost);
             }
             else {
-                author_link_element.css('border', '2px solid red');
-                $('#author-link-course-input-error-p').html("Проверьте правильность ввода ссылки!");
-                validation = false;
+                swal({
+                    title: "Ошибка!",
+                    text: "Проверьте правильность ввода данных!"
+                });
             }
-
-            if (validation === true) {
-                postCourse(title, platform, course_link, author_name, author_link, description, cost);
+        }
+    },
+    watch: {
+        title(new_title) {
+            if (new_title.trim().length > 0) {
+                $('#title-course-input').css('border', '2px solid greenyellow');
+                $('#title-course-input-error-p').html("");
+                this.title_validation = true;
             }
-
-
-            // postCourse(title, platform, course_link, author_name, author_link, description, cost);
+            else {
+                $('#title-course-input').css('border', '2px solid red');
+                $('#title-course-input-error-p').html("Поле не может быть пустым!");
+                this.title_validation = false;
+            }
+        },
+        platform(new_platform) {
+            if (new_platform.trim().length > 0) {
+                $('#platform-course-input').css('border', '2px solid greenyellow');
+                $('#platform-course-input-error-p').html("");
+                this.platform_validation = true;
+            }
+            else {
+                $('#platform-course-input').css('border', '2px solid red');
+                $('#platform-course-input-error-p').html("Поле не может быть пустым!");
+                this.platform_validation = false;
+            }
+        },
+        course_link(new_course_link) {
+            if (new_course_link.trim().length > 0) {
+                if (isValueURL(new_course_link)) {
+                    $('#link-course-course-input').css('border', '2px solid greenyellow');
+                    $('#link-course-course-input-error-p').html("");
+                    this.course_link_validation = true;
+                }
+                else {
+                    $('#link-course-course-input').css('border', '2px solid red')
+                    $('#link-course-course-input-error-p').html("Введённое значение не является ссылкой!");
+                    this.course_link_validation = false;
+                }
+            }
+            else {
+                $('#link-course-course-input').css('border', '2px solid red');
+                $('#link-course-course-input-error-p').html("Поле не может быть пустым!");
+                this.course_link_validation = false;
+            }
+        },
+        author_username(new_author_username) {
+            if (new_author_username.trim().length > 0) {
+                $('#author-name-course-input').css('border', '2px solid greenyellow');
+                $('#author-name-course-input-error-p').html("");
+                this.author_username_validation = true;
+            }
+            else {
+                $('#author-name-course-input').css('border', '2px solid red');
+                $('#author-name-course-input-error-p').html("Введённое значение не является ссылкой!");
+                this.author_username_validation = false;
+            }
+        },
+        author_link(new_author_link) {
+            if (new_author_link.trim().length > 0) {
+                if (isValueURL(new_author_link)) {
+                    $('#author-link-course-input').css('border', '2px solid greenyellow');
+                    $('#author-link-course-input-error-p').html("");
+                    this.author_link_validation = true;
+                }
+                else {
+                    $('#author-link-course-input').css('border', '2px solid red');
+                    $('#author-link-course-input-error-p').html("Введённое значение не является ссылкой!");
+                    this.author_link_validation = false;
+                }
+            }
+            else {
+                $('#author-link-course-input').css('border', '2px solid red');
+                $('#author-link-course-input-error-p').html("Поле не может быть пустым!");
+                this.author_link_validation = false;
+            }
+        },
+        description(new_description) {
+            if (new_description.trim().length > 0) {
+                $('#suggest-course-textarea').css('border', '2px solid greenyellow');
+                $('#suggest-course-textarea-error-p').html("");
+                this.description_validation = true;
+            }
+            else {
+                $('#suggest-course-textarea').css('border', '2px solid red');
+                $('#suggest-course-textarea-error-p').html("Поле не может быть пустым!");
+                this.description_validation = false;
+            }
+        },
+        cost(new_cost) {
+            if (new_cost.trim().length > 0) {
+                $('#cost-course-input').css('border', '2px solid greenyellow');
+                $('#cost-course-input-error-p').html("");
+                this.cost_validation = true;
+            }
+            else {
+                $('#cost-course-input').css('border', '2px solid red');
+                $('#cost-course-input-error-p').html("Поле не может быть пустым!");
+                this.cost_validation = false;
+            }
         }
     },
     created() {

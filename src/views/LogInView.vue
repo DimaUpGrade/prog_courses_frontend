@@ -9,8 +9,8 @@
                     <p>Пароль:</p>
                 </div>
                 <div class="data-fields">
-                    <input id="login" type="text">
-                    <input id="password" type="password">
+                    <input id="login" type="text" v-model="login">
+                    <input id="password" type="password" v-model="password">
                 </div>
             </div>
             <button class="button-shadow button-general button-default-border" id="submit-button" @click="loginAccountMethod">Войти</button>
@@ -30,12 +30,13 @@ export default {
     },
     data() {
         return {
-            status: ""
+            login: "",
+            password: ""
         };
     },
     methods: {
         loginAccountMethod() {
-            loginAccount($('#login').val(), $('#password').val())
+            loginAccount(this.login, this.password);
         }
     },
     mounted() {

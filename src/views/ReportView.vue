@@ -9,23 +9,76 @@
                     <p>Описание:</p>
                 </div>
                 <div class="data-fields-report">
-                    <input id="report-title" type="text">
-                    <textarea name="" id="textarea-report"></textarea>
+                    <input id="report-title" type="text" placeholder="Опишите проблему кратко" v-model="report_header">
+                    <p class="error-p" id="report-title-error-p"></p>
+                    <textarea name="" id="textarea-report" placeholder="Опишите проблему поподробнее"
+                        v-model="report_text"></textarea>
+                    <p class="error-p" id="report-text-error-p"></p>
                 </div>
             </div>
-            <button class="button-shadow button-general button-default-border" id="send-report-button" @click="">Отправить</button>
+            <button class="button-shadow button-general button-default-border" id="send-report-button"
+                @click="submitReport">Отправить</button>
         </div>
-        
+
     </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue'
+import { sendReport } from '../network'
 
 export default {
     name: 'ReportView',
     components: {
         NavBar
+    },
+    data() {
+        return {
+            report_header: "",
+            report_text: "",
+            header_validation: false,
+            text_validation: false
+        }
+    },
+    methods: {
+        async submitReport() {
+            if (this.header_validation == true && this.text_validation == true) {
+                let result;
+                result = await sendReport(this.report_header, this.report_text);
+            }
+            else {
+                swal({ title: 'Ошибка!', text: 'Проверьте правильность заполнения полей!' })
+            }
+        },
+        test() {
+            alert('texx')
+        }
+    },
+    watch: {
+        report_header(new_header) {
+            if (new_header.trim().length >= 10) {
+                $('#report-title').css('border', '3px solid greenyellow')
+                $('#report-title-error-p').html('')
+                this.header_validation = true
+            }
+            else {
+                $('#report-title').css('border', '3px solid red')
+                $('#report-title-error-p').html('Не менее 10 символов!')
+                this.header_validation = false
+            }
+        },
+        report_text(new_text) {
+            if (new_text.trim().length >= 20) {
+                $('#textarea-report').css('border', '3px solid greenyellow')
+                $('#report-text-error-p').html('')
+                this.text_validation = true
+            }
+            else {
+                $('#textarea-report').css('border', '3px solid red')
+                $('#report-text-error-p').html('Не менее 20 символов!')
+                this.text_validation = false
+            }
+        }
     }
 }
 </script>
@@ -75,7 +128,7 @@ export default {
     margin: 1em;
     display: flex;
     flex-direction: column;
-    gap: 1.6em;
+    /* gap: 1.6em; */
     width: 100%;
     margin: 11px 20px;
 }
@@ -84,6 +137,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin: 0;
+    gap: 1em;
 }
 
 #report-title {
@@ -98,5 +152,4 @@ export default {
     margin-bottom: 7em;
     width: 30em;
 }
-
 </style>

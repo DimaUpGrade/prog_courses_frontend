@@ -11,7 +11,7 @@ function defaultErrorHandler() {
         text: "Что-то пошло не так...",
         type: "success"
     }).then(function () {
-        
+
     });
 }
 
@@ -42,7 +42,7 @@ async function loginAccount(username_, password_) {
 
 
 // WIP
-async function registration_account(username_, password_, email_) {
+async function registrationAccount(username_, password_, email_) {
     let result;
     result = await axios({
         method: 'post',
@@ -54,14 +54,14 @@ async function registration_account(username_, password_, email_) {
             email: email_
         }
     })
-        .then((response) => {
-            login_account(username_, password_)
+        .then(async (response) => {
+            await loginAccount(username_, password_);
         })
         .catch((error) => {
             if (error.response.status == '500') {
                 swal({
-                    title: "Успешный выход!",
-                    text: "Вы вышли из аккаунта!",
+                    title: "Ошибка!",
+                    text: "Что-то пошло не так...",
                     type: "success"
                 })
             }
@@ -520,7 +520,7 @@ async function getAllTags() {
                 text: "Что-то пошло не так...",
                 type: "success"
             }).then(function () {
-                
+
             });
         })
 
@@ -542,7 +542,7 @@ async function getNews() {
                 text: "Что-то пошло не так...",
                 type: "success"
             }).then(function () {
-                
+
             });
         })
 
@@ -550,11 +550,46 @@ async function getNews() {
 }
 
 
+async function sendReport(header_, text_) {
+    let result;
+    result = await axios({
+        method: 'post',
+        url: `${API_URL}/api/reports/`,
+        headers: {},
+        data: {
+            header: header_,
+            report_text: text_
+        }
+    })
+        .then((response) => {
+            result = response;
+            swal({
+                title: "Спасибо!!",
+                text: "Ваш отчёт об ошибке был успешно отправлен!",
+                type: "success"
+            }).then(function () {
+                router.back();
+            });
+        })
+        .catch((error) => {
+            swal({
+                title: "Ошибка!",
+                text: "Что-то пошло не так...",
+                type: "success"
+            }).then(function () {
+
+            });
+        })
+
+    return result;
+}
+
+
 export {
     API_URL,
     axios,
     loginAccount,
-    registration_account,
+    registrationAccount,
     logout,
     likeComment,
     likeReview,
@@ -571,5 +606,6 @@ export {
     addCourseToFavorite,
     searchCourses,
     getAllTags,
-    getNews
+    getNews,
+    sendReport
 }
