@@ -2,8 +2,8 @@
     <div class="reviews-list">
         <div class="review-div" v-for="review in reviews" @loadReviews="toParent()">
             <div class="user-rating">
-                <p class="user"><b>{{ review.user.username }}</b></p>
-                <p class="rating">{{ review.rating }}/10</p>
+                <p class="review-user"><b>{{ review.user.username }}</b></p>
+                <p class="review-rating">{{ review.rating }}/10</p>
             </div>
 
             <p>{{ review.text_review }}</p>
@@ -91,7 +91,7 @@ export default {
     -webkit-box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
     -moz-box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
     box-shadow: -3px 3px 8px 0px rgba(34, 60, 80, 0.2) inset;
-    height: 500px;
+    height: 470px;
     width: 95%;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -100,7 +100,7 @@ export default {
 .review-div {
     width: 95%;
     /* margin: 0 10px; */
-    padding: 5px 10px;
+    padding: 5px 10px 15px 15px;
     background-color: var(--primary);
     border-radius: 5px;
 }
@@ -112,14 +112,16 @@ export default {
     height: 30px;
 }
 
-.user {
+.review-user {
     width: 90%;
+    justify-self: flex-start;
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
 
-.rating {
+.review-rating {
     width: 10%;
+    justify-self: flex-end;
 }
 
 #more-reviews-button {

@@ -40,7 +40,7 @@
                         <h2>–</h2>
                     </div>
                     <div v-if="course_info.rating != 0" v-bind:style="{'background-color': getColorForRating(course_info.rating)}" class="review-block-header-rating">
-                        <h2>{{ course_info.rating }}/10</h2>
+                        <h2 class="course-rating">{{ course_info.rating }}/10</h2>
                     </div>
                 </div>
                 <div id="reviews-content">
@@ -75,7 +75,7 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
-import { API_URL, axios, customGETRequest, getCourseInfo, getComments, getReviews, postComment, isReviewExists, loadMore, addCourseToFavorite } from '../network';
+import { getCourseInfo, getComments, getReviews, postComment, isReviewExists, loadMore, addCourseToFavorite } from '../network';
 import router from '@/router';
 import Tags from '@/components/Tags.vue';
 import Reviews from '@/components/Reviews.vue';
@@ -449,4 +449,9 @@ h1 {
 .defult_link:visited {
     color: white;
 }
+
+/* .course-rating {
+    -webkit-text-stroke: 1px var(--bright-background);
+    color: rgb(138, 138, 138);
+} */
 </style>

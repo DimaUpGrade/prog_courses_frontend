@@ -54,11 +54,11 @@ export default {
   async created() {
     this.isAuth = tokenIsSet();
     if (this.isAuth == true) {
-      this.username = localStorage.getItem('username')
+      this.username = localStorage.getItem('username');
     }
     let tags_data;
-    tags_data = await getAllTags()
-    this.tags_data = tags_data
+    tags_data = await getAllTags();
+    this.tags_data = tags_data;
   }
 }
 </script>

@@ -32,6 +32,14 @@ export default {
         goToSearchResults() {
             router.push({path:`/search/results/`, query:{search_query: this.search_query, only_free: this.only_free, tag: this.tag}});
         }
+    },
+    created() {
+        if (this.$route.query.only_free == 'true') {
+            this.only_free = true;
+        }
+        if (this.$route.query.search_query != '') {
+            this.search_query = this.$route.query.search_query;
+        }
     }
 }
 

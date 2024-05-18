@@ -7,6 +7,9 @@
             </div>
 
         </div>
+        <div class="button-shadow non-tag" v-if="tags != null && tags.length == 0">
+            –
+        </div>
     </div>
 </template>
 
@@ -77,5 +80,12 @@ div.tag p {
 
 .tooltip:hover .tooltiptext {
     visibility: visible;
+}
+
+.non-tag {
+    padding: 5px 10px;
+    background-color: var(--primary);
+    border-radius: 5px;
+    color: white;
 }
 </style>

@@ -257,7 +257,8 @@ async function customGETRequest(link) {
     })
         .then(response => result = response)
         .catch((error) => {
-            alert(error.response.status)
+            // alert(error.response.status)
+            defaultErrorHandler()
         })
 
     return result.data;
@@ -424,7 +425,8 @@ async function getUserCourses() {
     })
         .then(response => result = response)
         .catch((error) => {
-            alert(error)
+            // alert(error)
+            defaultErrorHandler()
         })
 
     return result.data;
@@ -443,14 +445,15 @@ async function addCourseToFavorite(id_course) {
     })
         .then(response => result = response)
         .catch((error) => {
-            alert(error)
+            // alert(error)
+            defaultErrorHandler()
         })
 
     return result.data;
 }
 
 
-async function searchCourses(search_string, is_free, tag) {
+async function searchCourses(search_string, only_free, tag) {
     let result;
     let url;
 
@@ -462,12 +465,14 @@ async function searchCourses(search_string, is_free, tag) {
         search_string = '';
     }
 
-    if (is_free === true) {
-        url = `${API_URL}/api/courses/?search_query=${search_string}&only_free=true&tag=${tag}`
-    }
-    else {
-        url = `${API_URL}/api/courses/?search_query=${search_string}&tag=${tag}`
-    }
+    
+    url = `${API_URL}/api/courses/?search_query=${search_string}&only_free=${only_free}&tag=${tag}`
+    // if (only_free == true) {
+    //     url = `${API_URL}/api/courses/?search_query=${search_string}&only_free=${is_free}&tag=${tag}`
+    // }
+    // else {
+    //     url = `${API_URL}/api/courses/?search_query=${search_string}&tag=${tag}`
+    // }
 
     result = await axios({
         method: 'get',

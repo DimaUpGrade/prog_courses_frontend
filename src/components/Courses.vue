@@ -1,5 +1,5 @@
 <template>
-    <div class="default-item-in-wrapper course-item" v-for="course in courses">
+    <div class="course-item default-item-in-wrapper" v-for="course in courses">
         <div class="course-item-content">
             <div class="course-item-header">
                 <h2 class="course-item-header-title" @click="goToCourse(course.id)">{{ course.title }} (by {{
@@ -12,10 +12,10 @@
                     <h2>{{ course.rating }}/10</h2>
                 </div>
             </div>
-
             <p>Теги: 
                 <Tags v-bind:tags="course.tags" />
             </p>
+            <p>Стоимость: {{ course.cost }}</p>
             <br>
             <a v-bind:href="course.link" class="course-link button-shadow button-general">Ссылка на
                 курс</a>
@@ -90,12 +90,12 @@ export default {
 }
 
 .course-item {
-    padding: 2%;
+    padding: 1% 2%;
     width: 90%;
     min-height: 200px;
 }
 
 .course-item-content {
-    padding: 20px 20px 20px 30px;
+    padding: 10px 0px 20px 5px;
 }
 </style>

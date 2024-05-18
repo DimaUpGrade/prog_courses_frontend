@@ -119,7 +119,9 @@ export default {
     align-items: center;
     font-size: 20px;
     letter-spacing: 6px;
-    border: 1px solid var(--bright-background);
+    border-radius: 5px;
+    border: none;
+    /* border: 1px solid var(--bright-background); */
 }
 
 .like_button:hover {
@@ -133,7 +135,7 @@ export default {
 
 .like_button_true {
     background-color: rgb(74, 255, 113);
-    color: white;
+    /* color: white; */
 }
 
 #more-comments-button {

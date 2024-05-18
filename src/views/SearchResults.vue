@@ -47,17 +47,17 @@ export default {
     },
     methods: {
         async rerenderResults() {
-            this.search_query = this.$route.query.search_query
-            this.only_free = this.$route.query.only_free
-            this.tag = this.$route.query.tag
-            this.results_data = await searchCourses(this.search_query, this.only_free, this.tag)
-            this.courses = this.results_data.results
+            this.search_query = this.$route.query.search_query;
+            this.only_free = this.$route.query.only_free;
+            this.tag = this.$route.query.tag;
+            this.results_data = await searchCourses(this.search_query, this.only_free, this.tag);
+            this.courses = this.results_data.results;
         },
         async getMoreCourses() {
             let new_data;
-            new_data = await loadMore(this.more_link)
-            this.more_link = new_data.data.next
-            this.courses = this.courses.concat(new_data.data.results)
+            new_data = await loadMore(this.more_link);
+            this.more_link = new_data.data.next;
+            this.courses = this.courses.concat(new_data.data.results);
         },
         removeTag() {
             this.tag = "";
@@ -65,17 +65,17 @@ export default {
         }
     },
     async created() {
-        this.search_query = this.$route.query.search_query
-        this.only_free = this.$route.query.only_free
-        this.tag = this.$route.query.tag
-        this.results_data = await searchCourses(this.search_query, this.only_free, this.tag)
-        this.courses = this.results_data.results
-        this.more_link = this.results_data.next
+        this.search_query = this.$route.query.search_query;
+        this.only_free = this.$route.query.only_free;
+        this.tag = this.$route.query.tag;
+        this.results_data = await searchCourses(this.search_query, this.only_free, this.tag);
+        this.courses = this.results_data.results;
+        this.more_link = this.results_data.next;
 
         this.$watch(
             () => this.$route.params,
             () => {
-                this.rerenderResults()
+                this.rerenderResults();
             },
             // fetch the data when the view is created and the data is
             // already being observed

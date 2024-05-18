@@ -80,7 +80,7 @@ export default {
     display: flex;
     gap: 15px;
     width: 99%;
-    min-height: 1000px;
+    min-height: 800px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;

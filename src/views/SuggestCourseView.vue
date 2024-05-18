@@ -107,14 +107,14 @@ export default {
     },
     watch: {
         title(new_title) {
-            if (new_title.trim().length > 0) {
+            if (new_title.trim().length > 4) {
                 $('#title-course-input').css('border', '2px solid greenyellow');
                 $('#title-course-input-error-p').html("");
                 this.title_validation = true;
             }
             else {
                 $('#title-course-input').css('border', '2px solid red');
-                $('#title-course-input-error-p').html("Поле не может быть пустым!");
+                $('#title-course-input-error-p').html("Не менее 5 символов!");
                 this.title_validation = false;
             }
         },
@@ -181,14 +181,14 @@ export default {
             }
         },
         description(new_description) {
-            if (new_description.trim().length > 0) {
+            if (new_description.trim().length > 20) {
                 $('#suggest-course-textarea').css('border', '2px solid greenyellow');
                 $('#suggest-course-textarea-error-p').html("");
                 this.description_validation = true;
             }
             else {
                 $('#suggest-course-textarea').css('border', '2px solid red');
-                $('#suggest-course-textarea-error-p').html("Поле не может быть пустым!");
+                $('#suggest-course-textarea-error-p').html("Не менее 20 символов!");
                 this.description_validation = false;
             }
         },
