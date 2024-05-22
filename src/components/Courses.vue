@@ -15,7 +15,8 @@
             <p>Теги: 
                 <Tags v-bind:tags="course.tags" />
             </p>
-            <p>Стоимость: {{ course.cost }}</p>
+            <p v-if="course.price !== 0">Стоимость: {{ course.price }}</p>
+            <p v-if="course.price === 0">Стоимость: бесплатно</p>
             <br>
             <a v-bind:href="course.link" class="course-link button-shadow button-general">Ссылка на
                 курс</a>

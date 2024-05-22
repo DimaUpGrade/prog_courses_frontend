@@ -20,8 +20,8 @@
 
                 <h4>Платформа: {{ course_info.platform.title }}</h4>
 
-                <h4 v-if="course_info.cost !== null">Стоимость: {{ course_info.cost }}</h4>
-                <h4 v-if="course_info.cost == null">Стоимость: не указано</h4>
+                <h4 v-if="course_info.price !== 0">Стоимость: {{ course_info.price }}</h4>
+                <h4 v-if="course_info.price === 0">Стоимость: Бесплатно</h4>
 
                 <h4>Описание:</h4>
                 <p>{{ course_info.description }}</p>

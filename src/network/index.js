@@ -332,7 +332,7 @@ async function postReview(id_course_, text_review_, rating_) {
 }
 
 
-async function postCourse(title_, platform_, course_link_, author_name_, author_link_, description_, cost_) {
+async function postCourse(title_, platform_, course_link_, author_name_, author_link_, description_, price_) {
     let result;
 
     if (tokenIsSet()) {
@@ -349,7 +349,7 @@ async function postCourse(title_, platform_, course_link_, author_name_, author_
                 author_username: author_name_,
                 author_link: author_link_,
                 description: description_,
-                cost: cost_
+                price: price_
             }
         })
             .then(response => {

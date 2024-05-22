@@ -36,10 +36,10 @@
                             placeholder="Укажите ссылку на страницу автора курса" v-model="author_link">
                         <p class="error-p" id="author-link-course-input-error-p"></p>
 
-                        <input type="text" id="cost-course-input"
-                            placeholder='Укажите заявленную стоимость курса (или напишите "Бесплатно", если курс бесплатный)'
-                            v-model="cost">
-                        <p class="error-p" id="cost-course-input-error-p"></p>
+                        <input type="number" id="price-course-input"
+                            placeholder='Впишите 0, если курс бесплатный'
+                            v-model="price">
+                        <p class="error-p" id="price-course-input-error-p"></p>
 
                         <textarea class="default-text-area" id="suggest-course-textarea"
                             placeholder="Укажите описание курса" v-model="description"></textarea>
@@ -75,12 +75,12 @@ export default {
             author_username: "",
             author_link: "",
             description: "",
-            cost: "",
+            price: null,
             title_validation: false,
             platform_validation: false,
             author_username_validation: false,
             description_validation: false,
-            cost_validation: false,
+            price_validation: false,
             course_link_validation: false,
             author_link_validation: false,
         }
@@ -91,11 +91,10 @@ export default {
                 this.platform_validation == true &&
                 this.author_username_validation == true &&
                 this.description_validation == true &&
-                this.cost_validation == true &&
+                this.price_validation == true &&
                 this.course_link_validation == true &&
                 this.author_link_validation == true) {
-                // alert('penis')
-                postCourse(this.title, this.platform, this.course_link, this.author_username, this.author_link, this.description, this.cost);
+                postCourse(this.title, this.platform, this.course_link, this.author_username, this.author_link, this.description, this.price);
             }
             else {
                 swal({
@@ -192,16 +191,16 @@ export default {
                 this.description_validation = false;
             }
         },
-        cost(new_cost) {
-            if (new_cost.trim().length > 0) {
-                $('#cost-course-input').css('border', '2px solid greenyellow');
-                $('#cost-course-input-error-p').html("");
-                this.cost_validation = true;
+        price(new_price) {
+            if (new_price >= 0 && new_price.toString() != '') {
+                $('#price-course-input').css('border', '2px solid greenyellow');
+                $('#price-course-input-error-p').html("");
+                this.price_validation = true;
             }
             else {
-                $('#cost-course-input').css('border', '2px solid red');
-                $('#cost-course-input-error-p').html("Поле не может быть пустым!");
-                this.cost_validation = false;
+                $('#price-course-input').css('border', '2px solid red');
+                $('#price-course-input-error-p').html("Некорректное значение!");
+                this.price_validation = false;
             }
         }
     },
