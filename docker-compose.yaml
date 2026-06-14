@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build:
+      context: ./prog_courses_frontend
+      dockerfile: ../Dockerfile
+      args:
+        # Адрес backend API, "вшиваемый" в сборку на этапе build.
+        # Значение берётся из .env (см. .env.example).
+        VUE_APP_API_URL: ${VUE_APP_API_URL:-http://127.0.0.1:8000}
+    container_name: prog_courses_frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"

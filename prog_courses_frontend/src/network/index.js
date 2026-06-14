@@ -2,7 +2,10 @@ import axios from 'axios';
 import router from '../router';
 import { tokenIsSet } from '@/validation';
 import swal from 'sweetalert';
-const API_URL = "http://127.0.0.1:8000";
+// Адрес backend API. Можно переопределить при сборке через переменную
+// окружения VUE_APP_API_URL (например, в .env файле Vue-проекта или
+// через build-args в Docker), не меняя код.
+const API_URL = process.env.VUE_APP_API_URL || "http://127.0.0.1:8000";
 
 
 function defaultErrorHandler() {
@@ -510,6 +513,42 @@ async function getAllTags() {
 }
 
 
+async function getRecommendations(limit = 8) {
+    let result;
+
+    if (tokenIsSet()) {
+        result = await axios({
+            method: 'get',
+            url: `${API_URL}/api/recommendations/?limit=${limit}`,
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem("token")
+            }
+        })
+            .then(response => result = response)
+            .catch((error) => {
+                defaultErrorHandler()
+            })
+    }
+    else {
+        result = await axios({
+            method: 'get',
+            url: `${API_URL}/api/recommendations/?limit=${limit}`,
+            headers: {}
+        })
+            .then(response => result = response)
+            .catch((error) => {
+                defaultErrorHandler()
+            })
+    }
+
+    if (result) {
+        return result.data;
+    }
+
+    return [];
+}
+
+
 async function getNews() {
     let result;
     result = await axios({
@@ -589,5 +628,6 @@ export {
     searchCourses,
     getAllTags,
     getNews,
-    sendReport
+    sendReport,
+    getRecommendations
 }

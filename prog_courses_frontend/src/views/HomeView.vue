@@ -24,30 +24,37 @@
         <h1>Или попробуйте поиск по тегу (beta)</h1>
         <Tags v-if="tags !== null" v-bind:tags="tags_data" />
       </div>
+      <div class="recommended-courses" v-if="recommended_courses !== null && recommended_courses.length > 0">
+        <h1>Рекомендуем для прохождения</h1>
+        <Courses v-bind:courses="recommended_courses" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue';
-import { getAllTags } from '@/network';
+import { getAllTags, getRecommendations } from '@/network';
 import { tokenIsSet } from '@/validation';
 import SearchBar from '@/components/SearchBar.vue';
 import Tags from '@/components/Tags.vue';
+import Courses from '@/components/Courses.vue';
 
 export default {
   name: 'HomeView',
   components: {
     NavBar,
     SearchBar,
-    Tags
+    Tags,
+    Courses
   },
 
   data() {
     return {
       isAuth: null,
       username: null,
-      tags_data: null
+      tags_data: null,
+      recommended_courses: null
     }
   },
 
@@ -59,6 +66,8 @@ export default {
     let tags_data;
     tags_data = await getAllTags();
     this.tags_data = tags_data;
+
+    this.recommended_courses = await getRecommendations(8);
   }
 }
 </script>
@@ -160,6 +169,28 @@ export default {
     0 4px 4px hsl(0deg 0% 0% / 0.075),
     0 8px 8px hsl(0deg 0% 0% / 0.075),
     0 16px 16px hsl(0deg 0% 0% / 0.075);
+}
+
+.recommended-courses {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90%;
+  background-color: var(--bright-background);
+  color: white;
+  padding: 1% 2% 2% 2%;
+  border-radius: 5px;
+  box-shadow:
+    0 1px 1px hsl(0deg 0% 0% / 0.075),
+    0 2px 2px hsl(0deg 0% 0% / 0.075),
+    0 4px 4px hsl(0deg 0% 0% / 0.075),
+    0 8px 8px hsl(0deg 0% 0% / 0.075),
+    0 16px 16px hsl(0deg 0% 0% / 0.075);
+}
+
+.recommended-courses .course-item {
+  width: 96%;
 }
 
 </style>
