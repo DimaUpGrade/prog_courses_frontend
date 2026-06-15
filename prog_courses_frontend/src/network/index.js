@@ -92,12 +92,19 @@ async function logout() {
         })
         .catch((error) => {
             if (error) {
+                // Токен может быть недействителен (например, после сброса базы данных) --
+                // в любом случае очищаем локальные данные сессии, чтобы пользователь
+                // мог нормально войти заново
+                localStorage.removeItem("token");
+                localStorage.removeItem("username");
+
                 swal({
                     title: "Произошла ошибка!",
-                    text: "Что-то пошло не так...",
+                    text: "Сессия истекла, выполнен выход из аккаунта.",
                     type: "success"
                 }).then(function () {
                     router.push({ path: '/' });
+                    router.go();
                 });
             }
         })
@@ -541,7 +548,7 @@ async function getRecommendations(limit = 8) {
             })
     }
 
-    if (result) {
+    if (result && result.data) {
         return result.data;
     }
 
